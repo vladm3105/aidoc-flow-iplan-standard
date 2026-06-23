@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iplanic.ai/schemas/iplan-evidence-bundle.schema.json",
+  "title": "IPLAN Evidence Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "metadata",
+    "plan_ref",
+    "summary",
+    "lineage",
+    "execution_evidence",
+    "assurance",
+    "seal"
+  ],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "document_type", "evidence_bundle_id", "generated_at", "generated_by", "sealed"],
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+(-draft)?$" },
+        "document_type": { "const": "iplan-evidence-bundle" },
+        "evidence_bundle_id": { "type": "string", "minLength": 1 },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "generated_by": { "type": "string", "minLength": 1 },
+        "sealed": { "type": "boolean" }
+      }
+    },
+    "plan_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["iplan_id", "plan_version_id", "run_id", "chain_id"],
+      "properties": {
+        "iplan_id": { "type": "string", "pattern": "^IPLAN-[0-9]{2,}$" },
+        "plan_version_id": { "type": "string", "minLength": 1 },
+        "run_id": { "type": "string", "minLength": 1 },
+        "chain_id": { "type": ["string", "null"] }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "outcome", "exceptions"],
+      "properties": {
+        "status": { "enum": ["pending", "passed", "failed", "partial"] },
+        "outcome": { "type": "string", "minLength": 1 },
+        "exceptions": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["upstream_refs", "downstream_refs", "commit_refs"],
+      "properties": {
+        "upstream_refs": { "type": "array", "items": { "type": "string" } },
+        "downstream_refs": { "type": "array", "items": { "type": "string" } },
+        "commit_refs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "execution_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signed_events",
+        "executor_assignments",
+        "command_results",
+        "test_results",
+        "artifacts",
+        "policy_decisions",
+        "approvals"
+      ],
+      "properties": {
+        "signed_events": { "type": "array", "items": { "type": "object" } },
+        "executor_assignments": { "type": "array", "items": { "type": "object" } },
+        "command_results": { "type": "array", "items": { "type": "object" } },
+        "test_results": { "type": "array", "items": { "type": "object" } },
+        "artifacts": { "type": "array", "items": { "type": "object" } },
+        "policy_decisions": { "type": "array", "items": { "type": "object" } },
+        "approvals": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "assurance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_evidence_satisfied",
+        "verification_passed",
+        "drift_findings",
+        "open_deferred_items",
+        "reviewer_notes"
+      ],
+      "properties": {
+        "required_evidence_satisfied": { "type": "boolean" },
+        "verification_passed": { "type": "boolean" },
+        "drift_findings": { "type": "array", "items": { "type": "object" } },
+        "open_deferred_items": { "type": "array", "items": { "type": "object" } },
+        "reviewer_notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "seal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sealed_at", "evidence_manifest", "canonical_hash", "signature"],
+      "properties": {
+        "sealed_at": { "type": ["string", "null"], "format": "date-time" },
+        "evidence_manifest": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["ref", "artifact_type", "canonical_hash"],
+            "properties": {
+              "ref": { "type": "string", "minLength": 1 },
+              "artifact_type": { "type": "string", "minLength": 1 },
+              "canonical_hash": {
+                "description": "sha256 over iplan-canonical-json v1.0 — see docs/standards/IPLAN-CANONICALIZATION.md (D-0021).",
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["algorithm", "value"],
+                "properties": {
+                  "algorithm": { "enum": ["sha256"] },
+                  "value": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" }
+                }
+              }
+            }
+          }
+        },
+        "canonical_hash": {
+          "description": "sha256 over iplan-canonical-json v1.0 — see docs/standards/IPLAN-CANONICALIZATION.md (D-0021).",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["algorithm", "value"],
+          "properties": {
+            "algorithm": { "enum": ["sha256"] },
+            "value": { "type": ["string", "null"], "pattern": "^[a-fA-F0-9]{64}$" }
+          }
+        },
+        "signature": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["key_id", "algorithm", "value"],
+          "properties": {
+            "key_id": { "type": ["string", "null"] },
+            "algorithm": { "enum": ["ed25519", "hmac-sha256"] },
+            "value": { "type": ["string", "null"] }
+          }
+        }
+      }
+    }
+  }
+}

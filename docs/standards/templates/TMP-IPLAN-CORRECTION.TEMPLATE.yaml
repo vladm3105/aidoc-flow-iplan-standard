@@ -1,0 +1,208 @@
+# TMP-IPLAN-CORRECTION.TEMPLATE.yaml
+# Temporary, bounded-write plan for correcting a blocked or defective IPLAN step.
+
+metadata:
+  schema_version: "1.3-draft"
+  document_type: "temporary-iplan"
+  artifact_type: "TMP-IPLAN"
+  tmp_iplan_id: "TMP-IPLAN-2026-06-01-correction"
+  tmp_kind: "correction"
+  title: "[Temporary correction title]"
+  status: "Draft" # Draft | Review | Approved | Active | Completed | Abandoned | Promoted
+  created_at: "2026-01-01T00:00:00Z"
+  expires_at: "2026-12-31T00:00:00Z"
+  owner: "[Owner]"
+  promotion_policy: "promote_if_scope_expands"
+
+intent:
+  summary: "[What defect or blocker this temporary correction resolves]"
+  reason: "[Why the correction can be bounded without a new permanent IPLAN]"
+  expected_outcome: "[Observable corrected state]"
+  non_goals:
+    - "[Out of scope item]"
+
+scope:
+  in:
+    - "[Specific correction]"
+  out:
+    - "[Excluded work]"
+  risk_level: "medium" # low | medium | high
+  mutation_policy: "bounded_write"
+  correction_scope:
+    - "[File, behavior, or configuration boundary this correction may change]"
+  investigation_questions: []
+  expiration_rule: "Close or promote before expires_at."
+
+plan:
+  dependencies: []
+  steps:
+    - step_id: "STEP-001"
+      title: "[Correction step title]"
+      intent: "[Why this correction step exists]"
+      target_files:
+        - path: "[path/to/file]"
+          action: "modify"
+      commands:
+        setup:
+          items: []
+          not_applicable_reason: "[Why setup is not required, or null]"
+        execute:
+          items:
+            - "[exact correction command or instruction]"
+          not_applicable_reason: null
+        verify:
+          items:
+            - "[exact verification command]"
+          not_applicable_reason: null
+      executor_context:
+        repository:
+          url: "[repository-url]"
+          default_branch: "main"
+          base_ref: "[branch-or-commit]"
+        workspace:
+          working_directory: "[repo-relative-working-directory]"
+          write_scope:
+            - "[allowed/path/**]"
+          read_only_paths:
+            - "[read-only/reference/path]"
+        knowledge_refs:
+          - ref_type: "decision"
+            ref: "[source-blocker-or-defect-ref]"
+            required: true
+        mcp_tools:
+          - name: "[mcp-tool-name]"
+            purpose: "[why the executor may use this tool]"
+            required: false
+        secrets_policy: "no_secrets" # pragma: allowlist secret
+        forbidden_paths:
+          - "[path/executor/must-not-touch]"
+      executor_work:
+        work_order_id: "WORK-001"
+        dispatchable: true
+        todos:
+          - todo_id: "TODO-001"
+            description: "[Concrete bounded correction TODO]"
+            type: "edit"
+            priority: "P1"
+            allowed_actions:
+              - "read"
+              - "modify"
+              - "run_command"
+              - "submit_artifact"
+            acceptance_criteria:
+              - "[Observable condition proving the correction is complete]"
+            evidence_required:
+              - event_type: "artifact.created"
+                artifact_type: "changed_file_manifest"
+                description: "[Files changed by the correction]"
+            status: "Not Started"
+        reporting:
+          progress_events:
+            - "task.started"
+            - "artifact.created"
+          completion_event: "task.completed"
+          artifact_manifest_required: true
+          final_summary_required: true
+      evidence_required:
+        - "execution_log"
+        - "changed_file_manifest"
+      failure_handling:
+        on_blocker: "Emit task.blocked and stop mutating files."
+        on_ambiguity: "Request clarification before changing correction scope."
+        on_test_failure: "Attach failing output and mark the correction blocked or failed."
+        on_policy_denial: "Stop the denied action and emit policy-denial evidence."
+        on_partial_completion: "Report completed TODOs, remaining TODOs, and changed files."
+      status: "Not Started"
+
+verification:
+  required_commands:
+    - command: "[exact verification command]"
+      expected_result: "[expected pass/fail]"
+      required_for_completion: true
+  completion_criteria:
+    - "[Correction criterion]"
+
+evidence_requirements:
+  required_events:
+    - "task.started"
+    - "artifact.created"
+    - "task.completed"
+  required_artifacts:
+    - type: "changed_file_manifest"
+      description: "[Changed files and correction summary]"
+  approvals:
+    - role: "maintainer"
+      required: true
+
+source_iplan_handoff:
+  handoff_id: "TMP-HANDOFF-001"
+  source_iplan_ref:
+    iplan_id: "IPLAN-01"
+    plan_version_id: "[plan-version-id]"
+    step_id: "STEP-001"
+    work_order_id: "WORK-001"
+    task_id: null
+    run_id: null
+  trigger: "defect"
+  allowed_scope:
+    file_patterns:
+      - "[allowed/path/**]"
+    actions:
+      - "read"
+      - "modify"
+      - "run_command"
+      - "submit_artifact"
+    policy_refs:
+      - "[policy-ref]"
+  pause_standard_iplan: true
+  return_contract:
+    expected_return_to_step: "STEP-001"
+    required_evidence:
+      - "task.completed"
+      - "changed_file_manifest"
+    required_decision: "resume"
+    max_duration: "PT24H"
+
+return_handoff:
+  handoff_id: "TMP-HANDOFF-001"
+  target_iplan_ref:
+    iplan_id: "IPLAN-01"
+    plan_version_id: "[plan-version-id]"
+    step_id: "STEP-001"
+    work_order_id: "WORK-001"
+  return_gate:
+    required_events:
+      - "task.completed"
+    required_artifacts:
+      - "changed_file_manifest"
+    required_review: true
+    decision_owner: "[Owner]"
+  allowed_resume_actions:
+    - "resume_standard_iplan"
+    - "keep_blocked"
+    - "promote_to_permanent_iplan"
+    - "abandon_tmp"
+  promotion_rules:
+    promotion_policy: "promote_if_scope_expands"
+    promotion_required_when:
+      - "correction changes approved IPLAN intent or scope"
+
+return_result:
+  outcome: null
+  evidence_refs: []
+  resume_action: null
+  promotion_decision: null
+  completed_at: null
+
+handoff:
+  current_state: "Not Started"
+  resume_from_step: "STEP-001"
+  blockers: []
+  sessions: []
+
+closure:
+  result: null
+  promoted_to_permanent_iplan: false
+  permanent_iplan_ref: null
+  cleanup_required: true
+  evidence_bundle_ref: null

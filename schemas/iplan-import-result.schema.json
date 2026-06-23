@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iplanic.ai/schemas/iplan-import-result.schema.json",
+  "title": "IPLAN Import Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "import_id",
+    "status",
+    "artifact_type",
+    "source",
+    "iplan_id",
+    "plan_version_id",
+    "canonical_hash",
+    "validation_report_id",
+    "imported_by",
+    "imported_at",
+    "errors",
+    "warnings"
+  ],
+  "properties": {
+    "import_id": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["accepted", "rejected", "accepted_with_warnings"] },
+    "artifact_type": { "enum": ["IPLAN", "IPLAN_CHAIN"] },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_system", "source_ref", "received_at"],
+      "properties": {
+        "source_system": { "enum": ["aidoc-flow-framework", "iplanic-api", "manual-upload", "connector"] },
+        "source_ref": { "type": "string", "minLength": 1 },
+        "received_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "iplan_id": { "type": ["string", "null"], "pattern": "^IPLAN-[0-9]{2,}$" },
+    "plan_version_id": { "type": ["string", "null"] },
+    "canonical_hash": {
+      "description": "sha256 over iplan-canonical-json v1.0 — see docs/standards/IPLAN-CANONICALIZATION.md (D-0021).",
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": { "enum": ["sha256"] },
+        "value": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" }
+      }
+    },
+    "validation_report_id": { "type": ["string", "null"] },
+    "imported_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actor_id", "actor_type"],
+      "properties": {
+        "actor_id": { "type": "string", "minLength": 1 },
+        "actor_type": { "enum": ["user", "service_account", "connector"] }
+      }
+    },
+    "imported_at": { "type": "string", "format": "date-time" },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "message"],
+        "properties": {
+          "code": { "type": "string", "minLength": 1 },
+          "message": { "type": "string", "minLength": 1 },
+          "path": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "message"],
+        "properties": {
+          "code": { "type": "string", "minLength": 1 },
+          "message": { "type": "string", "minLength": 1 },
+          "path": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

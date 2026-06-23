@@ -1,0 +1,360 @@
+# IPLAN-CHAIN-TEMPLATE.yaml
+# Ordered, executor-aware execution model for multiple IPLANs.
+
+metadata:
+  schema_version: "1.3-draft"
+  document_type: "iplan-chain"
+  chain_id: "IPLAN-CHAIN-01"
+  title: "[Chain title]"
+  status: "Draft" # Draft | Review | Approved | Active | Completed | Superseded | Abandoned
+  created_at: "2026-01-01T00:00:00Z"
+  updated_at: "2026-01-01T00:00:00Z"
+  owner: "[Owner]"
+
+intent:
+  summary: "[One sentence chain outcome]"
+  outcome: "[Observable result after the chain completes]"
+  non_goals: []
+
+plans:
+  - iplan_id: "IPLAN-01"
+    plan_version: "1.0.0"
+    plan_version_id: "[plan-version-id-01]"
+    title: "[Foundation plan title]"
+    status: "Approved"
+    file_path: "IPLAN-01_foundation.yaml"
+    artifact_ref: "[artifact-ref-01]"
+    version_record_ref: "[version-record-ref-01]"
+    canonical_hash:
+      algorithm: "sha256"
+      value: "0000000000000000000000000000000000000000000000000000000000000000"
+    exec_ready_status: "passed"
+    validation_report_id: "[validation-report-id-01]"
+    approval_event_id: "[approval-event-id-01]"
+    approved_hash:
+      algorithm: "sha256"
+      value: "0000000000000000000000000000000000000000000000000000000000000000"
+    approved_at: "2026-01-01T00:00:00Z"
+  - iplan_id: "IPLAN-02"
+    plan_version: "1.0.0"
+    plan_version_id: "[plan-version-id-02]"
+    title: "[Dependent plan title]"
+    status: "Approved"
+    file_path: "IPLAN-02_dependent.yaml"
+    artifact_ref: "[artifact-ref-02]"
+    version_record_ref: "[version-record-ref-02]"
+    canonical_hash:
+      algorithm: "sha256"
+      value: "1111111111111111111111111111111111111111111111111111111111111111"
+    exec_ready_status: "passed"
+    validation_report_id: "[validation-report-id-02]"
+    approval_event_id: "[approval-event-id-02]"
+    approved_hash:
+      algorithm: "sha256"
+      value: "1111111111111111111111111111111111111111111111111111111111111111"
+    approved_at: "2026-01-01T00:00:00Z"
+  - iplan_id: "IPLAN-03"
+    plan_version: "1.0.0"
+    plan_version_id: "[plan-version-id-03]"
+    title: "[Parallel plan title]"
+    status: "Approved"
+    file_path: "IPLAN-03_parallel.yaml"
+    artifact_ref: "[artifact-ref-03]"
+    version_record_ref: "[version-record-ref-03]"
+    canonical_hash:
+      algorithm: "sha256"
+      value: "2222222222222222222222222222222222222222222222222222222222222222"
+    exec_ready_status: "passed"
+    validation_report_id: "[validation-report-id-03]"
+    approval_event_id: "[approval-event-id-03]"
+    approved_hash:
+      algorithm: "sha256"
+      value: "2222222222222222222222222222222222222222222222222222222222222222"
+    approved_at: "2026-01-01T00:00:00Z"
+
+dependencies:
+  - dependency_id: "DEP-001"
+    from:
+      iplan_id: "IPLAN-01"
+      step_id: "STEP-001"
+      work_order_id: "WORK-001"
+      todo_id: "TODO-001"
+      output_ref: "[artifact-or-evidence-ref]"
+    to:
+      iplan_id: "IPLAN-02"
+      step_id: "STEP-001"
+      work_order_id: "WORK-001"
+      todo_id: "TODO-001"
+    type: "blocks" # blocks | informs | optional
+    gate: "completion_required" # completion_required | evidence_required | approval_required | context_available
+    reason: "[Why this dependency exists]"
+  - dependency_id: "DEP-002"
+    from:
+      iplan_id: "IPLAN-01"
+      step_id: "STEP-001"
+      work_order_id: "WORK-001"
+      todo_id: "TODO-001"
+      output_ref: "[artifact-or-evidence-ref]"
+    to:
+      iplan_id: "IPLAN-03"
+      step_id: "STEP-001"
+      work_order_id: "WORK-001"
+      todo_id: "TODO-001"
+    type: "blocks"
+    gate: "completion_required"
+    reason: "[Why this dependency exists]"
+
+execution_path:
+  strategy: "tiered_dag"
+  tiers:
+    - tier: 1
+      label: "Foundation"
+      entry_gate:
+        required_dependencies: []
+        required_approvals: []
+      plan_sequence:
+        - sequence: 1
+          iplan_id: "IPLAN-01"
+          dispatch_mode: "sequential"
+          required_work_orders:
+            - step_id: "STEP-001"
+              work_order_id: "WORK-001"
+      parallel_safe: false
+      dispatch_policy:
+        max_parallel_plans: 1
+        max_parallel_tasks: 1
+        require_clean_gate: true
+      exit_gate:
+        required_events:
+          - "task.completed"
+        required_artifacts:
+          - "changed_file_manifest"
+          - "test_output"
+        require_evidence_bundle: true
+    - tier: 2
+      label: "Dependent Parallel Work"
+      entry_gate:
+        required_dependencies:
+          - "DEP-001"
+          - "DEP-002"
+        required_approvals: []
+      plan_sequence:
+        - sequence: 1
+          iplan_id: "IPLAN-02"
+          dispatch_mode: "parallel"
+          required_work_orders:
+            - step_id: "STEP-001"
+              work_order_id: "WORK-001"
+        - sequence: 1
+          iplan_id: "IPLAN-03"
+          dispatch_mode: "parallel"
+          required_work_orders:
+            - step_id: "STEP-001"
+              work_order_id: "WORK-001"
+      parallel_safe: true
+      dispatch_policy:
+        max_parallel_plans: 2
+        max_parallel_tasks: 2
+        require_clean_gate: true
+      exit_gate:
+        required_events:
+          - "task.completed"
+        required_artifacts:
+          - "changed_file_manifest"
+          - "test_output"
+        require_evidence_bundle: true
+
+policy:
+  max_parallel_runs: 1
+  max_parallel_tasks_per_tier: 2
+  max_tasks_per_executor: 1
+  require_human_gate_between_tiers: false
+  conflict_strategy: "block_on_conflict"
+  resource_conflict_policy:
+    file_lock_mode: "exclusive_write"
+    lock_scopes:
+      - "file_path"
+      - "mcp_tool"
+      - "artifact_ref"
+    shared_lock_groups: []
+    conflict_evidence_required: true
+
+initialization:
+  required_status: "Approved"
+  plan_version_checks:
+    - "all_plan_versions_approved"
+    - "all_approved_hashes_match"
+    - "all_validation_reports_passed"
+    - "all_exec_ready_statuses_passed"
+  graph_checks:
+    - "dependencies_resolved"
+    - "tiers_cover_declared_plans"
+    - "dependency_graph_acyclic"
+    - "resource_conflicts_checked"
+  handoff_checks:
+    - "all_blocking_dependencies_have_handoffs"
+    - "handoff_sources_resolve"
+    - "handoff_targets_resolve"
+  runtime_records:
+    chain_execution_record_required: true
+    plan_execution_records_required: true
+    evidence_store_ready: true
+
+start_conditions:
+  first_tier:
+    tier: 1
+    entry_gate_required: true
+  required_resources:
+    - "executor_capacity_available"
+    - "write_scopes_available"
+    - "evidence_store_available"
+  policy_checks:
+    - "chain_policy_allowed"
+    - "resource_conflicts_clear"
+    - "parallel_dispatch_limits_available"
+  context_checks:
+    - "chain_context_resolved"
+    - "knowledge_refs_available"
+    - "mcp_tools_available"
+  start_events:
+    - "task.assigned"
+    - "task.accepted"
+
+chain_context:
+  repository:
+    url: "[repository-url]"
+    default_branch: "main"
+    base_ref: "[branch-or-commit]"
+  knowledge_refs:
+    - ref_type: "spec" # spec | decision | knowledge_base | code_summary | run_log
+      ref: "[chain-context-ref]"
+      required: true
+  mcp_tools:
+    - name: "[mcp-tool-name]"
+      purpose: "[why chain executors may use this tool]"
+      required: false
+  artifact_refs: []
+
+evidence_requirements:
+  required_events:
+    - "task.started"
+    - "artifact.created"
+    - "task.completed"
+  required_artifacts:
+    - type: "chain_execution_record"
+      description: "[Chain-level execution record]"
+    - type: "evidence_bundle"
+      description: "[Sealed evidence bundle for the chain]"
+  required_plan_evidence:
+    - iplan_id: "IPLAN-01"
+      required_work_orders:
+        - "WORK-001"
+      required_events:
+        - "task.completed"
+    - iplan_id: "IPLAN-02"
+      required_work_orders:
+        - "WORK-001"
+      required_events:
+        - "task.completed"
+    - iplan_id: "IPLAN-03"
+      required_work_orders:
+        - "WORK-001"
+      required_events:
+        - "task.completed"
+  approvals:
+    - role: "reviewer"
+      required: false
+
+completion_gate:
+  criteria:
+    - "all_required_dependencies_satisfied"
+    - "all_tier_exit_gates_passed"
+    - "all_plan_completion_gates_passed"
+    - "all_required_evidence_accepted"
+  required_events:
+    - "task.completed"
+  required_artifacts:
+    - "chain_execution_record"
+    - "evidence_bundle"
+  required_handoffs:
+    - "HANDOFF-001"
+    - "HANDOFF-002"
+  chain_evidence_bundle_required: true
+  final_state: "Completed"
+
+inter_plan_handoffs:
+  - handoff_id: "HANDOFF-001"
+    from:
+      iplan_id: "IPLAN-01"
+      step_id: "STEP-001"
+      work_order_id: "WORK-001"
+      artifact_ref: "[artifact-or-evidence-ref]"
+    to:
+      iplan_id: "IPLAN-02"
+      step_id: "STEP-001"
+      work_order_id: "WORK-001"
+      context_ref: "[handoff-context-ref]"
+    handoff_type: "blocking"
+    required_context:
+      - "[Context package or artifact the target plan needs]"
+    required_evidence:
+      - "task.completed"
+      - "changed_file_manifest"
+    acceptance_gate:
+      required_events:
+        - "task.completed"
+      required_artifacts:
+        - "changed_file_manifest"
+      decision: "automatic"
+    fallback:
+      on_missing_context: "Block target plan dispatch and request missing context from source plan owner."
+      on_rejected_evidence: "Keep target plan queued and open a review-required chain blocker."
+  - handoff_id: "HANDOFF-002"
+    from:
+      iplan_id: "IPLAN-01"
+      step_id: "STEP-001"
+      work_order_id: "WORK-001"
+      artifact_ref: "[artifact-or-evidence-ref]"
+    to:
+      iplan_id: "IPLAN-03"
+      step_id: "STEP-001"
+      work_order_id: "WORK-001"
+      context_ref: "[handoff-context-ref]"
+    handoff_type: "blocking"
+    required_context:
+      - "[Context package or artifact the target plan needs]"
+    required_evidence:
+      - "task.completed"
+      - "changed_file_manifest"
+    acceptance_gate:
+      required_events:
+        - "task.completed"
+      required_artifacts:
+        - "changed_file_manifest"
+      decision: "automatic"
+    fallback:
+      on_missing_context: "Block target plan dispatch and request missing context from source plan owner."
+      on_rejected_evidence: "Keep target plan queued and open a review-required chain blocker."
+
+handoff:
+  current_state: "Not Started"
+  resume_from:
+    tier: 1
+    iplan_id: "IPLAN-01"
+    step_id: "STEP-001"
+    work_order_id: "WORK-001"
+  blockers: []
+  sessions: []
+
+navigation:
+  blockers: []
+  deferred_items: []
+  cross_plan_obligations: []
+  change_history: []
+
+semantic_rules:
+  unique_plan_ids_required: true
+  references_must_resolve: true
+  acyclic_dependencies_required: true
+  tiers_must_cover_declared_plans: true
+  work_order_refs_must_resolve: true

@@ -1,0 +1,8 @@
+{
+  "description": "cross-org event: project in allowed_projects, org differs but a matching cross_org_grant on a first_party executor -> accept (clause 4 cross-org branch)",
+  "event": {"org_id": "org-b", "project_id": "proj-1", "executor_id": "exec:aaaaaaaaaaaaaaaa"},
+  "registrations": [
+    {"executor_id": "exec:aaaaaaaaaaaaaaaa", "owner_org_id": "org-a", "allowed_projects": ["proj-1"], "status": "active", "trust_level": "first_party", "cross_org_grants": [{"org_id": "org-b", "project_id": "proj-1"}]}
+  ],
+  "expected": {"accept": true, "reason": null}
+}

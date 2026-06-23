@@ -1,0 +1,44 @@
+{
+  "validation_report_id": "valrep-2026-06-11-7c2d",
+  "subject_ref": {
+    "artifact_type": "IPLAN",
+    "id": "IPLAN-01",
+    "plan_version_id": "plan-version-01HZ",
+    "canonical_hash": {
+      "algorithm": "sha256",
+      "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "status": "passed",
+  "schema_validation": {
+    "schema_id": "iplan-document.schema.json",
+    "result": "passed",
+    "errors": [],
+    "warnings": []
+  },
+  "semantic_validation": {
+    "duplicate_ids": [],
+    "unresolved_references": [],
+    "unresolved_refs": [],
+    "placeholder_fields": [],
+    "command_evidence_coverage": {
+      "commands_checked": 6,
+      "commands_without_evidence": [],
+      "result": "passed"
+    },
+    "file_conflicts": [],
+    "chain_graph_integrity": {
+      "result": "not_applicable",
+      "cycles": [],
+      "missing_tier_refs": [],
+      "missing_dependency_refs": []
+    }
+  },
+  "readiness": {
+    "exec_ready_score": 96,
+    "result": "ready",
+    "blocking_findings": []
+  },
+  "findings": [],
+  "generated_at": "2026-06-11T14:00:01Z"
+}

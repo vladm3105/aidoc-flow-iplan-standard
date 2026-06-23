@@ -1,0 +1,42 @@
+{
+  "executor_id": "exec:hermes2zqf7kx3a4b5c6d",
+  "protocol_agent_id": "agent-hermes-01",
+  "display_name": "Hermes Execution Engine",
+  "owner_org_id": "org-acme",
+  "protocols_supported": ["a2a", "mcp"],
+  "capabilities": ["code_edit", "test_run", "code_review"],
+  "trust_level": "trusted",
+  "allowed_projects": ["proj-iplanic"],
+  "allowed_tools": ["bash", "edit", "read"],
+  "max_parallel_tasks": 4,
+  "heartbeat_url": "https://hermes.acme.example/heartbeat",
+  "task_endpoint": "https://hermes.acme.example/a2a/tasks",
+  "log_ingest_key_id": "key-hermes-2026-06",
+  "signing_keys": [
+    {
+      "key_id": "key-hermes-2026-05",
+      "algorithm": "ed25519",
+      "public_key": "kcG6RtdVN7C7Hk0dn0wps1AyGKDGfBKUqI0qZEX/xQI=",
+      "valid_from": "2026-05-01T00:00:00Z",
+      "valid_to": "2026-06-01T00:00:00Z",
+      "status": "retired"
+    },
+    {
+      "key_id": "key-hermes-2026-06",
+      "algorithm": "ed25519",
+      "public_key": "GzX8FcbVVCDJzJfW2qpLZhWnKS+ZS/Y+OAVRW2Mvp1k=",
+      "valid_from": "2026-06-01T00:00:00Z",
+      "valid_to": null,
+      "status": "active"
+    }
+  ],
+  "cross_org_grants": [
+    { "org_id": "org-partner", "project_id": "proj-shared" }
+  ],
+  "artifact_upload_policy": {
+    "max_artifact_bytes": 10485760,
+    "allowed_media_types": ["application/x-ndjson", "application/json", "text/plain"]
+  },
+  "status": "active",
+  "last_seen_at": "2026-06-11T14:29:00Z"
+}

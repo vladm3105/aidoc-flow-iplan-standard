@@ -1,0 +1,8 @@
+{
+  "description": "cross-org event with a matching cross_org_grant but trust_level is trusted (not first_party) -> org_mismatch (the cross-org branch is gated on first_party)",
+  "event": {"org_id": "org-b", "project_id": "proj-1", "executor_id": "exec:aaaaaaaaaaaaaaaa"},
+  "registrations": [
+    {"executor_id": "exec:aaaaaaaaaaaaaaaa", "owner_org_id": "org-a", "allowed_projects": ["proj-1"], "status": "active", "trust_level": "trusted", "cross_org_grants": [{"org_id": "org-b", "project_id": "proj-1"}]}
+  ],
+  "expected": {"accept": false, "reason": "org_mismatch"}
+}

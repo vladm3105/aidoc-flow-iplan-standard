@@ -1,0 +1,65 @@
+comparison_id: "CMP-IPLAN-001-002"
+base_ref:
+  artifact_type: "IPLAN"
+  id: "IPLAN-01"
+  plan_version_id: "PV-IPLAN-01-1.0.0"
+  canonical_hash:
+    algorithm: "sha256"
+    value: "0000000000000000000000000000000000000000000000000000000000000000"
+target_ref:
+  artifact_type: "IPLAN"
+  id: "IPLAN-01"
+  plan_version_id: "PV-IPLAN-01-1.1.0"
+  canonical_hash:
+    algorithm: "sha256"
+    value: "1111111111111111111111111111111111111111111111111111111111111111"
+comparison_type: "version_to_version"
+summary:
+  changed: 4
+  added: 1
+  removed: 0
+  unchanged: 6
+  notes:
+    - "Executor work and verification evidence changed."
+section_diffs:
+  - section: "intent"
+    change_type: "unchanged"
+    summary: "Approved outcome did not change."
+    before_hash: "hash:intent:base"
+    after_hash: "hash:intent:target"
+    breaking: false
+  - section: "executor_work"
+    change_type: "modified"
+    summary: "Added a remote-executor TODO and acceptance criteria."
+    before_hash: "hash:executor-work:base"
+    after_hash: "hash:executor-work:target"
+    breaking: true
+  - section: "evidence"
+    change_type: "modified"
+    summary: "Completion now requires task.completed and artifact manifest evidence."
+    before_hash: "hash:evidence:base"
+    after_hash: "hash:evidence:target"
+    breaking: true
+  - section: "chain_order"
+    change_type: "unchanged"
+    summary: "No dependency or tier order changes."
+    before_hash: "hash:chain-order:base"
+    after_hash: "hash:chain-order:target"
+    breaking: false
+impact:
+  severity: "breaking"
+approval_impact:
+  approval_required: true
+  reason: "Executor work and evidence requirements changed after approval."
+  approver_roles:
+    - "project-owner"
+    - "security-reviewer"
+execution_impact:
+  rerun_required: true
+  affected_steps:
+    - "STEP-002"
+  affected_work_orders:
+    - "WORK-002"
+  affected_files:
+    - "packages/example/src/example.ts"
+generated_at: "2026-05-30T00:00:00Z"

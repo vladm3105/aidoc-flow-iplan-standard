@@ -1,0 +1,24 @@
+{
+  "import_id": "import-2026-06-11-3a1f",
+  "status": "accepted",
+  "artifact_type": "IPLAN",
+  "source": {
+    "source_system": "aidoc-flow-framework",
+    "source_ref": "PLAN-009_template-less-schema-fixtures.md",
+    "received_at": "2026-06-11T14:00:00Z"
+  },
+  "iplan_id": "IPLAN-01",
+  "plan_version_id": "plan-version-01HZ",
+  "canonical_hash": {
+    "algorithm": "sha256",
+    "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "validation_report_id": "valrep-2026-06-11-7c2d",
+  "imported_by": {
+    "actor_id": "svc-import-pipeline",
+    "actor_type": "service_account"
+  },
+  "imported_at": "2026-06-11T14:00:02Z",
+  "errors": [],
+  "warnings": []
+}

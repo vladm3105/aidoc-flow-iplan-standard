@@ -1,0 +1,56 @@
+{
+  "chain_version_id": "chain-version-01HZ",
+  "chain_id": "IPLAN-CHAIN-01",
+  "chain_version": "1.0.0",
+  "content_ref": {
+    "artifact_ref": "artifact-chain-01-v1",
+    "uri": "s3://iplanic-artifacts/org-acme/proj-iplanic/chain-01/v1.yaml",
+    "media_type": "application/yaml"
+  },
+  "canonical_hash": {
+    "algorithm": "sha256",
+    "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "source": {
+    "source_system": "aidoc-flow-framework",
+    "source_ref": "IPLAN-CHAIN-01.yaml",
+    "import_id": "import-2026-06-11-9d4e"
+  },
+  "validation": {
+    "validation_report_id": "valrep-2026-06-11-c1a8",
+    "status": "passed",
+    "exec_ready_status": "ready",
+    "validated_at": "2026-06-11T16:00:01Z"
+  },
+  "approval": {
+    "decision": "approved",
+    "approved_by": "user-reviewer-1",
+    "approved_at": "2026-06-11T16:30:00Z",
+    "approved_hash": {
+      "algorithm": "sha256",
+      "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "policy_result": {
+      "result": "allowed",
+      "policy_id": "policy-approval-default",
+      "checked_at": "2026-06-11T16:29:58Z"
+    },
+    "exceptions": []
+  },
+  "immutability": {
+    "content_locked": true,
+    "mutable_fields": ["status", "validation", "approval", "supersession"],
+    "canonicalization": {
+      "algorithm": "iplan-canonical-json",
+      "version": "1.0"
+    }
+  },
+  "immutable": true,
+  "supersession": {
+    "supersedes_chain_version_id": null,
+    "superseded_by_chain_version_id": null
+  },
+  "created_at": "2026-06-11T16:00:02Z",
+  "imported_at": "2026-06-11T16:00:02Z",
+  "status": "Approved"
+}

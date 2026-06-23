@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iplanic.ai/schemas/artifact.schema.json",
+  "title": "Iplanic Artifact Reference",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "org_id",
+    "project_id",
+    "run_id",
+    "task_id",
+    "executor_id",
+    "artifact_type",
+    "uri",
+    "sha256",
+    "created_at"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string", "minLength": 1 },
+    "org_id": { "type": "string", "minLength": 1 },
+    "project_id": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "task_id": { "type": "string", "minLength": 1 },
+    "executor_id": { "type": "string", "pattern": "^exec:[a-z2-7]{16,}$" },
+    "protocol_agent_id": { "type": "string", "minLength": 1 },
+    "artifact_type": {
+      "enum": [
+        "execution_log",
+        "test_output",
+        "coverage_report",
+        "lint_report",
+        "review_report",
+        "security_report",
+        "drift_report",
+        "changed_file_manifest",
+        "evidence_bundle"
+      ]
+    },
+    "uri": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" },
+    "media_type": { "type": "string" },
+    "byte_size": { "type": "integer", "minimum": 0 },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

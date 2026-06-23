@@ -1,0 +1,208 @@
+# TMP-IPLAN-INVESTIGATION.TEMPLATE.yaml
+# Temporary, read-only plan for answering questions before a standard IPLAN resumes.
+
+metadata:
+  schema_version: "1.3-draft"
+  document_type: "temporary-iplan"
+  artifact_type: "TMP-IPLAN"
+  tmp_iplan_id: "TMP-IPLAN-2026-06-01-investigation"
+  tmp_kind: "investigation"
+  title: "[Temporary investigation title]"
+  status: "Draft" # Draft | Review | Approved | Active | Completed | Abandoned | Promoted
+  created_at: "2026-01-01T00:00:00Z"
+  expires_at: "2026-12-31T00:00:00Z"
+  owner: "[Owner]"
+  promotion_policy: "promote_before_execution"
+
+intent:
+  summary: "[What question this temporary investigation answers]"
+  reason: "[Why the source IPLAN cannot safely continue without this answer]"
+  expected_outcome: "[Decision or evidence needed to resume the source IPLAN]"
+  non_goals:
+    - "[Out of scope item]"
+
+scope:
+  in:
+    - "[Included investigation area]"
+  out:
+    - "[Excluded work]"
+  risk_level: "low" # low | medium | high
+  mutation_policy: "read_only"
+  correction_scope: []
+  investigation_questions:
+    - "[Question the executor must answer]"
+  expiration_rule: "Close or promote before expires_at."
+
+plan:
+  dependencies: []
+  steps:
+    - step_id: "STEP-001"
+      title: "[Investigation step title]"
+      intent: "[Why this investigation step exists]"
+      target_files:
+        - path: "[path/to/file-or-directory]"
+          action: "read"
+      commands:
+        setup:
+          items: []
+          not_applicable_reason: "[Why setup is not required, or null]"
+        execute:
+          items:
+            - "[exact read-only inspection command]"
+          not_applicable_reason: null
+        verify:
+          items:
+            - "[exact command or review step proving the answer is complete]"
+          not_applicable_reason: null
+      executor_context:
+        repository:
+          url: "[repository-url]"
+          default_branch: "main"
+          base_ref: "[branch-or-commit]"
+        workspace:
+          working_directory: "[repo-relative-working-directory]"
+          write_scope:
+            - "[artifact-output/path/**]"
+          read_only_paths:
+            - "[path/to/inspect]"
+        knowledge_refs:
+          - ref_type: "decision"
+            ref: "[source-question-or-blocker-ref]"
+            required: true
+        mcp_tools:
+          - name: "[mcp-tool-name]"
+            purpose: "[why the executor may use this tool]"
+            required: false
+        secrets_policy: "no_secrets" # pragma: allowlist secret
+        forbidden_paths:
+          - "[path/executor/must-not-touch]"
+      executor_work:
+        work_order_id: "WORK-001"
+        dispatchable: true
+        todos:
+          - todo_id: "TODO-001"
+            description: "[Concrete investigation TODO]"
+            type: "inspect"
+            priority: "P1"
+            allowed_actions:
+              - "read"
+              - "run_command"
+              - "call_tool"
+              - "submit_artifact"
+            acceptance_criteria:
+              - "[Observable condition proving the question is answered]"
+            evidence_required:
+              - event_type: "artifact.created"
+                artifact_type: "investigation_report"
+                description: "[Answer, evidence, and recommendation]"
+            status: "Not Started"
+        reporting:
+          progress_events:
+            - "task.started"
+            - "artifact.created"
+          completion_event: "task.completed"
+          artifact_manifest_required: true
+          final_summary_required: true
+      evidence_required:
+        - "execution_log"
+        - "investigation_report"
+      failure_handling:
+        on_blocker: "Emit task.blocked and do not mutate source files."
+        on_ambiguity: "Request clarification before expanding investigation scope."
+        on_test_failure: "Attach failing output and mark the investigation blocked or failed."
+        on_policy_denial: "Stop the denied action and emit policy-denial evidence."
+        on_partial_completion: "Report answered questions, open questions, and evidence gathered."
+      status: "Not Started"
+
+verification:
+  required_commands:
+    - command: "[exact read-only verification command or review step]"
+      expected_result: "[expected answer or evidence]"
+      required_for_completion: true
+  completion_criteria:
+    - "[Investigation criterion]"
+
+evidence_requirements:
+  required_events:
+    - "task.started"
+    - "artifact.created"
+    - "task.completed"
+  required_artifacts:
+    - type: "investigation_report"
+      description: "[Answered questions and recommended return action]"
+  approvals:
+    - role: "maintainer"
+      required: false
+
+source_iplan_handoff:
+  handoff_id: "TMP-HANDOFF-001"
+  source_iplan_ref:
+    iplan_id: "IPLAN-01"
+    plan_version_id: "[plan-version-id]"
+    step_id: "STEP-001"
+    work_order_id: "WORK-001"
+    task_id: null
+    run_id: null
+  trigger: "investigation"
+  allowed_scope:
+    file_patterns:
+      - "[path/to/inspect/**]"
+    actions:
+      - "read"
+      - "run_command"
+      - "call_tool"
+      - "submit_artifact"
+    policy_refs:
+      - "[policy-ref]"
+  pause_standard_iplan: true
+  return_contract:
+    expected_return_to_step: "STEP-001"
+    required_evidence:
+      - "task.completed"
+      - "investigation_report"
+    required_decision: "resume"
+    max_duration: "PT24H"
+
+return_handoff:
+  handoff_id: "TMP-HANDOFF-001"
+  target_iplan_ref:
+    iplan_id: "IPLAN-01"
+    plan_version_id: "[plan-version-id]"
+    step_id: "STEP-001"
+    work_order_id: "WORK-001"
+  return_gate:
+    required_events:
+      - "task.completed"
+    required_artifacts:
+      - "investigation_report"
+    required_review: false
+    decision_owner: "[Owner]"
+  allowed_resume_actions:
+    - "resume_standard_iplan"
+    - "keep_blocked"
+    - "promote_to_permanent_iplan"
+    - "abandon_tmp"
+  promotion_rules:
+    promotion_policy: "promote_before_execution"
+    promotion_required_when:
+      - "investigation recommends implementation outside approved IPLAN scope"
+
+return_result:
+  outcome: null
+  evidence_refs: []
+  resume_action: null
+  promotion_decision: null
+  completed_at: null
+
+handoff:
+  current_state: "Not Started"
+  resume_from_step: "STEP-001"
+  blockers: []
+  sessions: []
+
+closure:
+  result: null
+  promoted_to_permanent_iplan: false
+  permanent_iplan_ref: null
+  cleanup_required: true
+  evidence_bundle_ref: null

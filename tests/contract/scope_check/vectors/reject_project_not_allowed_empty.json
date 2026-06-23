@@ -1,0 +1,8 @@
+{
+  "description": "empty allowed_projects = deny-all -> project_not_allowed (clause 3, deny-by-default)",
+  "event": {"org_id": "org-a", "project_id": "proj-1", "executor_id": "exec:aaaaaaaaaaaaaaaa"},
+  "registrations": [
+    {"executor_id": "exec:aaaaaaaaaaaaaaaa", "owner_org_id": "org-a", "allowed_projects": [], "status": "active"}
+  ],
+  "expected": {"accept": false, "reason": "project_not_allowed"}
+}

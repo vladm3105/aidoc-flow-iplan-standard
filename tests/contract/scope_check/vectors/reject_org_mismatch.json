@@ -1,0 +1,8 @@
+{
+  "description": "project granted but event org differs from owner_org_id (cross-org deferred) -> org_mismatch (clause 4)",
+  "event": {"org_id": "org-b", "project_id": "proj-1", "executor_id": "exec:aaaaaaaaaaaaaaaa"},
+  "registrations": [
+    {"executor_id": "exec:aaaaaaaaaaaaaaaa", "owner_org_id": "org-a", "allowed_projects": ["proj-1"], "status": "active"}
+  ],
+  "expected": {"accept": false, "reason": "org_mismatch"}
+}

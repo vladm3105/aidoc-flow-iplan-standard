@@ -1,0 +1,25 @@
+{
+  "event_id": "lifecycle-2026-06-11-5b8e",
+  "artifact_type": "IPLAN",
+  "iplan_id": "IPLAN-01",
+  "plan_version_id": "plan-version-01HZ",
+  "event_type": "approved",
+  "from_status": "Review",
+  "to_status": "Approved",
+  "actor": {
+    "actor_id": "user-reviewer-1",
+    "actor_type": "user"
+  },
+  "occurred_at": "2026-06-11T15:00:00Z",
+  "reason": "Plan passed independent review with zero load-bearing findings.",
+  "canonical_hash": {
+    "algorithm": "sha256",
+    "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "policy_result": {
+    "result": "allowed",
+    "policy_id": "policy-approval-default",
+    "checked_at": "2026-06-11T14:59:58Z",
+    "violations": []
+  }
+}

@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iplan-canonical"
+version = "0.1.0"
+description = "Reference implementation of IPLAN canonical JSON (RFC 8785) + signing, for the IPLAN standard"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "vladm3105" }]
+dependencies = ["rfc8785>=0.1.4", "cryptography>=42"]
+
+[project.optional-dependencies]
+dev = ["pyyaml>=6", "jsonschema>=4", "ruff>=0.5"]
+
+[tool.setuptools]
+packages = ["iplan_canonical"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"

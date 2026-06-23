@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iplanic.ai/schemas/execution-event.schema.json",
+  "title": "Iplanic Execution Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "org_id",
+    "project_id",
+    "iplan_id",
+    "plan_version_id",
+    "run_id",
+    "task_id",
+    "step_id",
+    "executor_id",
+    "trace_id",
+    "event_id",
+    "idempotency_key",
+    "event_type",
+    "occurred_at",
+    "received_at",
+    "status",
+    "artifact_refs",
+    "signature"
+  ],
+  "properties": {
+    "org_id": { "type": "string", "minLength": 1 },
+    "project_id": { "type": "string", "minLength": 1 },
+    "iplan_id": { "type": "string", "pattern": "^IPLAN-[0-9]{2,}$" },
+    "protocol_plan_id": { "type": ["string", "null"], "minLength": 1 },
+    "plan_version_id": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "task_id": { "type": "string", "minLength": 1 },
+    "step_id": { "type": "string", "minLength": 1 },
+    "executor_id": { "type": "string", "pattern": "^exec:[a-z2-7]{16,}$" },
+    "protocol_agent_id": { "type": ["string", "null"], "minLength": 1 },
+    "trace_id": { "type": "string", "minLength": 1 },
+    "event_id": { "type": "string", "minLength": 1 },
+    "idempotency_key": { "type": "string", "minLength": 1 },
+    "event_type": {
+      "enum": [
+        "task.assigned",
+        "task.accepted",
+        "task.started",
+        "step.started",
+        "mcp.tool.called",
+        "file.changed",
+        "test.started",
+        "test.passed",
+        "test.failed",
+        "artifact.created",
+        "task.blocked",
+        "task.completed",
+        "task.failed",
+        "task.cancelled"
+      ]
+    },
+    "occurred_at": { "type": "string", "format": "date-time", "description": "Executor event time (signed). Checked against received_at per the Clock-Skew Window (IPLAN-DEFINITIONS.md)." },
+    "received_at": { "type": "string", "format": "date-time", "description": "Ingest-stamped by Iplanic, overwriting any supplied value (excluded from the signature, D-0021). See Clock-Skew Window (IPLAN-DEFINITIONS.md)." },
+    "status": { "enum": ["accepted", "running", "blocked", "succeeded", "failed", "cancelled"] },
+    "artifact_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "payload": { "type": "object" },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "algorithm", "value"],
+      "properties": {
+        "key_id": { "type": "string", "minLength": 1 },
+        "algorithm": { "enum": ["ed25519", "hmac-sha256"] },
+        "value": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

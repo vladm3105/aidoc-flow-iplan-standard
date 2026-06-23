@@ -1,0 +1,8 @@
+{
+  "description": "active executor, same org, project granted -> accept",
+  "event": {"org_id": "org-a", "project_id": "proj-1", "executor_id": "exec:aaaaaaaaaaaaaaaa"},
+  "registrations": [
+    {"executor_id": "exec:aaaaaaaaaaaaaaaa", "owner_org_id": "org-a", "allowed_projects": ["proj-1", "proj-2"], "status": "active"}
+  ],
+  "expected": {"accept": true, "reason": null}
+}

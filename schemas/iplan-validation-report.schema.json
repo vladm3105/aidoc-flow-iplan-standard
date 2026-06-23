@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iplanic.ai/schemas/iplan-validation-report.schema.json",
+  "title": "IPLAN Validation Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "validation_report_id",
+    "subject_ref",
+    "status",
+    "schema_validation",
+    "semantic_validation",
+    "readiness",
+    "findings",
+    "generated_at"
+  ],
+  "properties": {
+    "validation_report_id": { "type": "string", "minLength": 1 },
+    "subject_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_type", "id", "plan_version_id", "canonical_hash"],
+      "properties": {
+        "artifact_type": { "enum": ["IPLAN", "IPLAN_CHAIN"] },
+        "id": { "type": "string", "minLength": 1 },
+        "plan_version_id": { "type": ["string", "null"] },
+        "canonical_hash": {
+          "description": "sha256 over iplan-canonical-json v1.0 — see docs/standards/IPLAN-CANONICALIZATION.md (D-0021).",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["algorithm", "value"],
+          "properties": {
+            "algorithm": { "enum": ["sha256"] },
+            "value": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" }
+          }
+        }
+      }
+    },
+    "status": { "enum": ["passed", "failed", "passed_with_warnings"] },
+    "schema_validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_id", "result", "errors", "warnings"],
+      "properties": {
+        "schema_id": { "type": "string", "minLength": 1 },
+        "result": { "enum": ["passed", "failed", "passed_with_warnings"] },
+        "errors": { "type": "array", "items": { "type": "object" } },
+        "warnings": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "semantic_validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "duplicate_ids",
+        "unresolved_references",
+        "unresolved_refs",
+        "placeholder_fields",
+        "command_evidence_coverage",
+        "file_conflicts",
+        "chain_graph_integrity"
+      ],
+      "properties": {
+        "duplicate_ids": { "type": "array", "items": { "type": "object" } },
+        "unresolved_references": { "type": "array", "items": { "type": "object" } },
+        "unresolved_refs": { "type": "array", "items": { "type": "object" } },
+        "placeholder_fields": { "type": "array", "items": { "type": "object" } },
+        "command_evidence_coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["commands_checked", "commands_without_evidence", "result"],
+          "properties": {
+            "commands_checked": { "type": "integer", "minimum": 0 },
+            "commands_without_evidence": { "type": "array", "items": { "type": "object" } },
+            "result": { "enum": ["passed", "failed", "not_applicable"] }
+          }
+        },
+        "file_conflicts": { "type": "array", "items": { "type": "object" } },
+        "chain_graph_integrity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["result", "cycles", "missing_tier_refs", "missing_dependency_refs"],
+          "properties": {
+            "result": { "enum": ["passed", "failed", "not_applicable"] },
+            "cycles": { "type": "array", "items": { "type": "object" } },
+            "missing_tier_refs": { "type": "array", "items": { "type": "object" } },
+            "missing_dependency_refs": { "type": "array", "items": { "type": "object" } }
+          }
+        }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exec_ready_score", "result", "blocking_findings"],
+      "properties": {
+        "exec_ready_score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "result": { "enum": ["ready", "not_ready", "ready_with_warnings"] },
+        "blocking_findings": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["finding_id", "severity", "category", "message", "path", "blocking"],
+        "properties": {
+          "finding_id": { "type": "string", "minLength": 1 },
+          "severity": { "enum": ["P0", "P1", "P2", "P3"] },
+          "category": { "type": "string", "minLength": 1 },
+          "message": { "type": "string", "minLength": 1 },
+          "path": { "type": ["string", "null"] },
+          "blocking": { "type": "boolean" }
+        }
+      }
+    },
+    "generated_at": { "type": "string", "format": "date-time" }
+  }
+}

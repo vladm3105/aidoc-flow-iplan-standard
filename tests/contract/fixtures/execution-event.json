@@ -1,0 +1,25 @@
+{
+  "org_id": "org-acme",
+  "project_id": "proj-iplanic",
+  "iplan_id": "IPLAN-01",
+  "protocol_plan_id": null,
+  "plan_version_id": "plan-version-01HZ",
+  "run_id": "run-2026-06-11-001",
+  "task_id": "TASK-001",
+  "step_id": "STEP-001",
+  "executor_id": "exec:hermes2zqf7kx3a4b5c6d",
+  "protocol_agent_id": null,
+  "trace_id": "trace-4d8f2b6a",
+  "event_id": "event-9c1e0a55",
+  "idempotency_key": "run-2026-06-11-001:TASK-001:task.completed",
+  "event_type": "task.completed",
+  "occurred_at": "2026-06-11T14:31:05Z",
+  "received_at": "2026-06-11T14:31:05Z",
+  "status": "succeeded",
+  "artifact_refs": ["artifact-7f3a9c20"],
+  "signature": {
+    "key_id": "key-hermes-2026-06",
+    "algorithm": "hmac-sha256",
+    "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

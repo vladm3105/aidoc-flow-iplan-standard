@@ -1,0 +1,8 @@
+{
+  "description": "event fails BOTH clause 3 (project) and clause 4 (org); first failing clause wins -> project_not_allowed",
+  "event": {"org_id": "org-b", "project_id": "proj-9", "executor_id": "exec:aaaaaaaaaaaaaaaa"},
+  "registrations": [
+    {"executor_id": "exec:aaaaaaaaaaaaaaaa", "owner_org_id": "org-a", "allowed_projects": ["proj-1"], "status": "active"}
+  ],
+  "expected": {"accept": false, "reason": "project_not_allowed"}
+}

@@ -1,0 +1,102 @@
+# IPLAN-TASK-TEMPLATE.yaml
+# Runtime task payload produced by Iplanic for a remote executor.
+
+task_id: "TASK-001"
+org_id: "[org-id]"
+project_id: "[project-id]"
+iplan_id: "IPLAN-01"
+protocol_plan_id: null
+plan_version_id: "[plan-version-id]"
+run_id: "RUN-001"
+step_id: "STEP-001"
+executor_id: "exec:hermes2zqf7kx3a4b5c6d"
+protocol_agent_id: null
+task_type: "execute_step"
+status: "queued"
+created_at: "2026-01-01T00:00:00Z"
+lease_expires_at: "2026-12-31T00:00:00Z"
+
+context_refs:
+  - "[context-ref]"
+
+required_artifacts:
+  - "execution_log"
+  - "changed_file_manifest"
+  - "test_output"
+
+tool_grants:
+  - "[mcp-tool-or-platform-grant]"
+
+budget_grant:
+  max_tokens: 0
+  max_duration_seconds: 0
+  max_cost_cents: 0
+
+work_order:
+  work_order_id: "WORK-001"
+  summary: "[What this executor must complete for the assigned step]"
+  todos:
+    - todo_id: "TODO-001"
+      description: "[Concrete remote executor TODO]"
+      type: "edit"
+      priority: "P1"
+      allowed_actions:
+        - "read"
+        - "modify"
+        - "run_command"
+        - "submit_artifact"
+      acceptance_criteria:
+        - "[Observable condition proving this TODO is complete]"
+      evidence_required:
+        - event_type: "artifact.created"
+          artifact_type: "changed_file_manifest"
+          description: "[Evidence required for this TODO]"
+  commands:
+    setup: []
+    execute:
+      - "[exact implementation command or instruction]"
+    verify:
+      - "[exact verification command]"
+  acceptance_criteria:
+    - "[Step-level acceptance criterion]"
+
+context_package:
+  repository:
+    url: "[repository-url]"
+    default_branch: "main"
+    base_ref: "[branch-or-commit]"
+  context_refs:
+    - "[context-ref]"
+  knowledge_refs:
+    - ref_type: "spec"
+      ref: "[knowledge-or-document-ref]"
+      required: true
+  mcp_tools:
+    - name: "[mcp-tool-name]"
+      purpose: "[why the executor may use this tool]"
+      required: false
+  tool_grants:
+    - "[mcp-tool-or-platform-grant]"
+  forbidden_paths:
+    - "[path/executor/must-not-touch]"
+  secrets_policy: "no_secrets" # pragma: allowlist secret
+
+reporting:
+  required_events:
+    - "task.started"
+    - "artifact.created"
+    - "task.completed"
+  required_artifacts:
+    - "execution_log"
+    - "changed_file_manifest"
+    - "test_output"
+  artifact_manifest_required: true
+  final_summary_required: true
+  progress_interval_seconds: 300
+
+failure_handling:
+  on_blocker: "Emit task.blocked with blocker details and stop mutating files."
+  on_ambiguity: "Request clarification before choosing an implementation path."
+  on_test_failure: "Attach failing output and mark the TODO blocked or failed."
+  on_policy_denial: "Stop the denied action and emit policy-denial evidence."
+  on_partial_completion: "Report completed TODOs, remaining TODOs, and changed files."

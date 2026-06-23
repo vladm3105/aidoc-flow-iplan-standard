@@ -1,0 +1,27 @@
+{
+  "description": "Authoritative IPLAN status projection (PLAN-002, backlog #2, D-0022). The event->record runtime projection plus the document-step correspondence, as data. This vector is the single source both Iplanic ingestion and a remote executor (iplan-runner) validate against; it must stay byte-consistent with IPLAN-DEFINITIONS.md (Status Projection) and the schema enums. event_status omitted on a row means the event_type does not itself set a status (none here). 'document_step_correspondence' maps a record task-level status to the document/TODO-plane step status (record-only 'Assigned' collapses to document 'Queued').",
+  "event_to_record": [
+    {"event_type": "task.assigned", "event_status": "accepted", "record_task_status": "Assigned"},
+    {"event_type": "task.accepted", "event_status": "accepted", "record_task_status": "Assigned"},
+    {"event_type": "task.started", "event_status": "running", "record_task_status": "Running"},
+    {"event_type": "step.started", "event_status": "running", "record_task_status": "Running"},
+    {"event_type": "mcp.tool.called", "event_status": "running", "record_task_status": "Running"},
+    {"event_type": "file.changed", "event_status": "running", "record_task_status": "Running"},
+    {"event_type": "artifact.created", "event_status": "running", "record_task_status": "Running"},
+    {"event_type": "test.started", "event_status": "running", "record_task_status": "Running"},
+    {"event_type": "test.passed", "event_status": "running", "record_task_status": "Running"},
+    {"event_type": "test.failed", "event_status": "running", "record_task_status": "Running"},
+    {"event_type": "task.blocked", "event_status": "blocked", "record_task_status": "Blocked"},
+    {"event_type": "task.completed", "event_status": "succeeded", "record_task_status": "Completed"},
+    {"event_type": "task.failed", "event_status": "failed", "record_task_status": "Failed"},
+    {"event_type": "task.cancelled", "event_status": "cancelled", "record_task_status": "Cancelled"}
+  ],
+  "document_step_correspondence": {
+    "Assigned": "Queued",
+    "Running": "Running",
+    "Blocked": "Blocked",
+    "Completed": "Completed",
+    "Failed": "Failed",
+    "Cancelled": "Cancelled"
+  }
+}

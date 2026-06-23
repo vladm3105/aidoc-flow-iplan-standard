@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iplanic.ai/schemas/iplan-chain-record.schema.json",
+  "title": "IPLAN Chain Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "org_id",
+    "project_id",
+    "chain_id",
+    "title",
+    "status",
+    "current_version_id",
+    "latest_version_id",
+    "record_version",
+    "owner",
+    "lifecycle",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "org_id": { "type": "string", "minLength": 1 },
+    "project_id": { "type": "string", "minLength": 1 },
+    "chain_id": { "type": "string", "pattern": "^IPLAN-CHAIN-[0-9]{2,}$" },
+    "title": { "type": "string", "minLength": 1 },
+    "status": {
+      "description": "Chain registry lifecycle status. Vocabulary is the chain document's lifecycle states (which include Completed, unlike plans) plus the registry-only retirement state Archived (D-0029).",
+      "enum": ["Draft", "Review", "Approved", "Active", "Completed", "Superseded", "Abandoned", "Archived"]
+    },
+    "current_version_id": { "type": "string", "minLength": 1 },
+    "latest_version_id": { "type": "string", "minLength": 1 },
+    "record_version": { "type": "integer", "minimum": 0, "description": "Optimistic-concurrency token. A chain registry-record mutation is a compare-and-set on this value (per (org_id, project_id, chain_id)); a successful write increments it. The same rule as the IPLAN registry, shared by both registries. See IPLAN-MANAGEMENT.md (Chain registry & version)." },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner_id", "owner_type"],
+      "properties": {
+        "owner_id": { "type": "string", "minLength": 1 },
+        "owner_type": { "enum": ["user", "team", "service_account"] }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "last_event_id", "last_transition_at", "available_transitions"],
+      "properties": {
+        "state": {
+          "enum": ["Draft", "Review", "Approved", "Active", "Completed", "Superseded", "Abandoned", "Archived"]
+        },
+        "last_event_id": { "type": "string", "minLength": 1 },
+        "last_transition_at": { "type": "string", "format": "date-time" },
+        "available_transitions": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "validate",
+              "submit_for_review",
+              "approve",
+              "reject",
+              "activate",
+              "complete",
+              "supersede",
+              "abandon",
+              "archive"
+            ]
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "labels": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

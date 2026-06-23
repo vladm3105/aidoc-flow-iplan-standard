@@ -1,0 +1,23 @@
+{
+  "org_id": "org-acme",
+  "project_id": "proj-iplanic",
+  "iplan_id": "IPLAN-01",
+  "title": "Template-less schema fixtures",
+  "status": "Approved",
+  "current_version_id": "plan-version-01HZ",
+  "latest_version_id": "plan-version-01HZ",
+  "record_version": 3,
+  "owner": {
+    "owner_id": "team-platform",
+    "owner_type": "team"
+  },
+  "lifecycle": {
+    "state": "Approved",
+    "last_event_id": "lifecycle-2026-06-11-5b8e",
+    "last_transition_at": "2026-06-11T15:00:00Z",
+    "available_transitions": ["activate", "supersede", "abandon"]
+  },
+  "labels": ["phase-a", "fixtures"],
+  "created_at": "2026-06-11T14:00:02Z",
+  "updated_at": "2026-06-11T15:00:00Z"
+}

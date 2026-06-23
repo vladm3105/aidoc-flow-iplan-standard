@@ -1,0 +1,8 @@
+{
+  "description": "active, same org, project not in allowed_projects -> project_not_allowed (clause 3)",
+  "event": {"org_id": "org-a", "project_id": "proj-9", "executor_id": "exec:aaaaaaaaaaaaaaaa"},
+  "registrations": [
+    {"executor_id": "exec:aaaaaaaaaaaaaaaa", "owner_org_id": "org-a", "allowed_projects": ["proj-1"], "status": "active"}
+  ],
+  "expected": {"accept": false, "reason": "project_not_allowed"}
+}

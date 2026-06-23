@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iplanic.ai/schemas/executor-registration.schema.json",
+  "title": "Iplanic Executor Registration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "executor_id",
+    "display_name",
+    "owner_org_id",
+    "protocols_supported",
+    "capabilities",
+    "trust_level",
+    "allowed_projects",
+    "allowed_tools",
+    "max_parallel_tasks",
+    "task_endpoint",
+    "log_ingest_key_id",
+    "artifact_upload_policy",
+    "status"
+  ],
+  "properties": {
+    "executor_id": { "type": "string", "pattern": "^exec:[a-z2-7]{16,}$" },
+    "protocol_agent_id": { "type": "string", "minLength": 1 },
+    "display_name": { "type": "string", "minLength": 1 },
+    "owner_org_id": { "type": "string", "minLength": 1 },
+    "protocols_supported": {
+      "type": "array",
+      "items": { "enum": ["a2a", "mcp", "webhook"] },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "code_edit",
+          "test_run",
+          "code_review",
+          "security_review",
+          "documentation_update",
+          "plan_analysis",
+          "drift_analysis",
+          "release_support"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "trust_level": { "enum": ["sandbox", "trusted", "first_party", "restricted"] },
+    "allowed_projects": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "allowed_tools": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "max_parallel_tasks": { "type": "integer", "minimum": 1 },
+    "heartbeat_url": { "type": "string" },
+    "task_endpoint": { "type": "string", "minLength": 1 },
+    "log_ingest_key_id": { "type": "string", "minLength": 1, "description": "Current active signing-key handle (event.signature.key_id binds to it, IPLANIC-FIRST-DESIGN §2.2). signing_keys[] is its versioned superset; deprecation is staged, not yet removed." },
+    "signing_keys": {
+      "description": "Versioned key history (IPLANIC-FIRST-DESIGN §2.4). An event signed at occurred_at verifies against the key whose [valid_from, valid_to) window covers it; status:revoked rejects events signed under that key. Supersedes the scalar log_ingest_key_id.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key_id", "algorithm", "valid_from", "status"],
+        "properties": {
+          "key_id": { "type": "string", "minLength": 1 },
+          "algorithm": { "enum": ["ed25519", "hmac-sha256"] },
+          "public_key": { "type": ["string", "null"], "minLength": 1, "description": "Public key for ed25519 (enables sha256(public_key)==executor_id self-certification); null/absent for the symmetric hmac-sha256 secret." },
+          "valid_from": { "type": "string", "format": "date-time" },
+          "valid_to": { "type": ["string", "null"], "format": "date-time", "description": "End of the key's validity window (exclusive); null = open / current key." },
+          "status": { "enum": ["active", "retired", "revoked"] }
+        }
+      }
+    },
+    "cross_org_grants": {
+      "description": "Cross-org acceptance grants (IPLANIC-FIRST-DESIGN §2.4 / §2.3). A first_party executor may serve (org_id, project_id) even though org_id != owner_org_id. The grant relaxes only the org check; project_id must still be in allowed_projects (Tenant Scope-Check clause 3).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["org_id", "project_id"],
+        "properties": {
+          "org_id": { "type": "string", "minLength": 1 },
+          "project_id": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "artifact_upload_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_artifact_bytes", "allowed_media_types"],
+      "properties": {
+        "max_artifact_bytes": { "type": "integer", "minimum": 1 },
+        "allowed_media_types": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "status": { "enum": ["pending", "active", "paused", "revoked"] },
+    "last_seen_at": { "type": "string", "format": "date-time" }
+  }
+}
