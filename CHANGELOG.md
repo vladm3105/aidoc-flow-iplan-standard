@@ -3,6 +3,36 @@
 All notable changes to the IPLAN standard are recorded here. The standard ships
 independently semver-tagged (`iplan/vX.Y.Z`); consumers pin a tag.
 
+## [0.2.0] — 2026-06-23
+
+Adds the curated, vendor-neutral prose for the **ecosystem roles**, the **transport
+& integration** contract, and the **plan-ingestion adapter** pattern — the design
+notes held back from `0.1.0` for a curation pass. Additive (no schema or
+`iplan_canonical` change); consumers may pin `iplan/v0.2.0` to reference them.
+
+### Added
+
+- **`docs/standards/IPLAN-ECOSYSTEM.md`** — the **author → manage → execute** role
+  separation and the principle that the IPLAN standard is an intentionally-richer
+  **hub that does not converge** to the source authoring formats it ingests
+  (bridged by ingestion adapters; the executor edge consumes a dispatched task
+  payload + pinned mirror).
+- **`docs/standards/TRANSPORT-INTEGRATION.md`** — the two integration edges (import;
+  execute), per-surface A2A/MCP channel mapping, executor onboarding + key
+  enrollment, delivery/failure/retry + the ingestion rejection response, the
+  artifact request→PUT→confirm→verify byte path, idempotency-as-contract, wire
+  security (TLS/replay/scope), and the broker-ready scale option.
+- **`docs/standards/PLAN-INGESTION-ADAPTERS.md`** — the per-source adapter contract
+  (detection, mapping, enrichment/defaults, provenance, readiness gating, loss
+  report) that converts any authoring or AI-agent plan into the IPLAN standard.
+
+### Notes
+
+- Curated for neutral publication: the old engineering codename, internal status
+  banners, cross-references to unpublished internal docs, and internal decision/
+  backlog identifiers were removed or restated as the standard's own positions.
+- 63 conformance tests unchanged (the additions are prose only).
+
 ## [0.1.0] — 2026-06-23
 
 Initial extraction of the IPLAN standard into its own neutral, versioned repo

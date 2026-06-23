@@ -18,7 +18,7 @@ and by any third-party executor, connector, or control surface that speaks the I
 | Path | What |
 | --- | --- |
 | `schemas/` | The normative JSON Schemas (17) — `iplan-document`, `iplan-chain`, `task`, `execution-event`, `executor-registration`, `iplan-comparison`, `iplan-validation-report`, `iplan-evidence-bundle`, the record/version schemas, … |
-| `docs/standards/` | The prose spec — `IPLAN-STANDARD`, `IPLAN-DEFINITIONS`, `IPLAN-CANONICALIZATION`, `IPLAN-MANAGEMENT`, `VERSIONING`, and `templates/` |
+| `docs/standards/` | The prose spec — `IPLAN-STANDARD`, `IPLAN-DEFINITIONS`, `IPLAN-CANONICALIZATION`, `IPLAN-MANAGEMENT`, `IPLAN-ECOSYSTEM`, `TRANSPORT-INTEGRATION`, `PLAN-INGESTION-ADAPTERS`, `VERSIONING`, and `templates/` |
 | `iplan_canonical/` | The **reference implementation** of IPLAN canonical JSON (RFC 8785 / JCS) + the signing payload + signature verify (ed25519 / hmac-sha256) — the normative algorithm both sides sign and verify with |
 | `tests/contract/` | The **conformance suite** — every schema validates its template/fixtures, the canonicalization is pinned by golden vectors, and the scope-check / status-projection contracts are replayed |
 
