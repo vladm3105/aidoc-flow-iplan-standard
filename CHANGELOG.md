@@ -3,6 +3,19 @@
 All notable changes to the IPLAN standard are recorded here. The standard ships
 independently semver-tagged (`iplan/vX.Y.Z`); consumers pin a tag.
 
+## [0.3.0] — 2026-06-23
+
+Additive schema field (no breaking change; consumers may pin `iplan/v0.3.0`).
+
+### Added
+
+- **`executor-registration.dispatch_token_id`** (optional) — a handle for the bearer
+  token a management plane sends as `Authorization` on task dispatch, resolved
+  out-of-band (env/vault) so the raw token is never stored in the registration.
+  Mirrors the existing `log_ingest_key_id` handle pattern; absent ⇒ no header
+  (backward-compatible). Enables authenticated dispatch to a receiver that mandates
+  a bearer.
+
 ## [0.2.0] — 2026-06-23
 
 Adds the curated, vendor-neutral prose for the **ecosystem roles**, the **transport

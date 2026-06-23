@@ -61,6 +61,7 @@
     "max_parallel_tasks": { "type": "integer", "minimum": 1 },
     "heartbeat_url": { "type": "string" },
     "task_endpoint": { "type": "string", "minLength": 1 },
+    "dispatch_token_id": { "type": "string", "minLength": 1, "description": "Optional handle for the bearer token the management plane sends as Authorization on task dispatch. Resolved out-of-band (e.g. env or vault) at dispatch time; the raw token is never stored here. Pairs with the executor's configured receiver token. Absent => dispatch sends no Authorization header." },
     "log_ingest_key_id": { "type": "string", "minLength": 1, "description": "Current active signing-key handle (event.signature.key_id binds to it, IPLANIC-FIRST-DESIGN §2.2). signing_keys[] is its versioned superset; deprecation is staged, not yet removed." },
     "signing_keys": {
       "description": "Versioned key history (IPLANIC-FIRST-DESIGN §2.4). An event signed at occurred_at verifies against the key whose [valid_from, valid_to) window covers it; status:revoked rejects events signed under that key. Supersedes the scalar log_ingest_key_id.",
