@@ -13,7 +13,7 @@ authors = [{ name = "vladm3105" }]
 dependencies = ["rfc8785>=0.1.4", "cryptography>=42"]
 
 [project.optional-dependencies]
-dev = ["pyyaml>=6", "jsonschema>=4", "ruff>=0.5"]
+dev = ["pyyaml>=6", "jsonschema[format-nongpl]>=4", "ruff>=0.5"]
 
 [tool.setuptools]
 packages = ["iplan_canonical"]
