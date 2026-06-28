@@ -62,8 +62,10 @@ identity, governed separately).
   `{ initiator_key_id, algorithm, value (lowercase hex), signed_at }` — excluded
   from its own signed payload.
 - **Trust anchor:** the verifier resolves `initiator_key_id` to a public key via a
-  configured **initiator keyring** (an authorized-initiator allowlist). Single-admin
-  deployments use a signed allowlist; see §5 for the keyless direction.
+  configured **initiator keyring**. The conformant L1 baseline is a **signed
+  authorized-initiator allowlist** (§9 R1); `initiator_key_id` resolution is an
+  interface, so a referenced identity provider / keyless signing (§5) is an additive
+  source later, not a breaking change.
 - **Verification (at intake, before execution):** (1) canonicalize, (2) verify the
   signature, (3) confirm the initiator is authorized for the target
   `client_id`/`project_id` scope. Failure ⇒ **refuse to execute**.
@@ -90,10 +92,11 @@ end-to-end checkable:
 signed IPLAN (initiator)  →  isolated execution  →  signed hash-chained ledger  →  evidence bundle
 ```
 
-The attestation format SHOULD follow the **in-toto / SLSA** provenance shape
-(subject = the IPLAN canonical digest; predicate = the execution ledger head and
-gate outcome). Aligning to that ecosystem gives interoperable, already-credible
-tooling rather than a bespoke format.
+The attestation format uses the **in-toto / SLSA v1** provenance predicate (§9 R3):
+subject = the IPLAN canonical digest; predicate = the execution ledger head and
+gate outcome, behind a thin mapping that keeps the IPLAN-native fields stable.
+Aligning to that ecosystem gives interoperable, already-credible tooling rather
+than a bespoke format.
 
 ## 4. L2 — transparency log
 
@@ -106,9 +109,11 @@ control-plane operator** (e.g. third-party executors, external auditors):
   `{ tree_size, root_hash, timestamp }` commitment.
 - **Proofs served on request:** Merkle **inclusion** proof (an event is in the
   log) and **consistency** proof (the log only appended, never rewrote).
-- **Witness cosigning (optional):** one or more independent parties cosign each
-  STH. This makes operator equivocation publicly **detectable** — the
-  non-blockchain substitute for consensus.
+- **Witness cosigning (OPTIONAL — §9 R2):** one or more independent parties cosign
+  each STH. This makes operator equivocation publicly **detectable** — the
+  non-blockchain substitute for consensus. Single-operator L2 is conformant; the
+  design admits a future tier that makes witness cosigning REQUIRED without breaking
+  L2 verifiers.
 - **External anchor (optional):** the STH MAY be timestamped against an external
   append-only authority (e.g. RFC 3161 TSA or OpenTimestamps) for
   proof-of-existence at time *T*.
@@ -152,10 +157,31 @@ Builds on `IPLAN-CANONICALIZATION.md` (the normative signer), and the
 Adds the assurance-level vocabulary, the `intake_control` provenance envelope, the
 `INTAKE.PROVENANCE` rules, and the L2 transparency-log contract.
 
-## 9. Open questions
+## 9. Resolved decisions (ratification gate)
 
-- Keyring distribution/rotation format for L1 (inline allowlist vs. referenced
-  identity provider).
-- Whether L2 witness cosigning is OPTIONAL or REQUIRED at the top tier.
-- Canonical attestation predicate fields for the evidence bundle (align to SLSA
-  v1 predicate vs. a minimal IPLAN-native predicate).
+Resolved 2026-06-28 to unblock L1 ratification. The stance throughout: ship the
+**simple conformant baseline now, designed forward-compatible** so the stronger
+option slots in additively (a MINOR bump), never a breaking rewrite.
+
+- **R1 — L1 keyring (was: inline allowlist vs. referenced IdP).** The conformant
+  L1 **baseline is the inline signed authorized-initiator allowlist**. The envelope
+  and keyring resolution MUST be designed so a **referenced identity provider /
+  keyless identity-bound signing** (§5, Sigstore-style) can be added later as an
+  additive trust-anchor source — i.e. `initiator_key_id` resolution is an interface
+  with the allowlist as one implementation, not the only one. No long-lived-key
+  assumption is baked into the wire envelope.
+- **R2 — L2 witness cosigning (was: OPTIONAL vs. REQUIRED).** Witness cosigning is
+  **OPTIONAL** at L2; single-operator L2 is conformant. The STH/log design MUST
+  admit **REQUIRED** witness cosigning as an additive top-tier policy (a future
+  higher tier), so making it mandatory later does not break L2 verifiers.
+- **R3 — attestation predicate (was: SLSA v1 vs. IPLAN-native).** The evidence
+  attestation uses the **in-toto / SLSA v1 provenance predicate** (subject = the
+  IPLAN canonical digest; predicate = the execution ledger head + gate outcome),
+  behind a thin mapping that keeps the IPLAN-native fields stable. Ecosystem
+  interoperability over a bespoke format (§3).
+
+Remaining before ratification (mechanics, not open design): land the
+`intake_control` provenance envelope as an additive (MINOR) field on
+`iplan-document` + L1 golden vectors (`tests/contract/`), then ratify L1 via the
+framework CHG / GATE-SPEC. The keyless direction (§5) and REQUIRED-witness tier
+remain informative/future, not L1 conformance requirements.
