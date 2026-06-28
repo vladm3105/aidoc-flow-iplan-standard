@@ -52,6 +52,25 @@
         "source_framework_version": { "type": "string", "minLength": 1 }
       }
     },
+    "intake_control": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional intake-time control metadata, NOT part of the signed plan payload (the L1 signature is over the canonical document with intake_control excluded). L0 documents omit it. IPLAN-ASSURANCE.md.",
+      "properties": {
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "L1 initiator-provenance envelope (IPLAN-ASSURANCE.md §2): a detached signature over the canonical IPLAN (with intake_control excluded). The verifier resolves initiator_key_id via the configured initiator keyring (baseline: a signed allowlist; §9 R1).",
+          "required": ["initiator_key_id", "algorithm", "value", "signed_at"],
+          "properties": {
+            "initiator_key_id": { "type": "string", "minLength": 1 },
+            "algorithm": { "type": "string", "enum": ["ed25519", "hmac-sha256"] },
+            "value": { "type": "string", "pattern": "^[0-9a-f]+$" },
+            "signed_at": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
     "intent": {
       "type": "object",
       "additionalProperties": false,
