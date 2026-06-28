@@ -56,11 +56,15 @@ The **initiator** is the party that authored/authorized the IPLAN for execution
 identity, governed separately).
 
 - **Signed payload:** the IPLAN canonicalized per `IPLAN-CANONICALIZATION.md`
-  (RFC 8785 JCS, recursive drop-null), reusing the normative `iplan_canonical`
-  reference signer (`ed25519` preferred; `hmac-sha256` for symmetric trust).
-- **Envelope:** a detached signature carried in `intake_control` —
-  `{ initiator_key_id, algorithm, value (lowercase hex), signed_at }` — excluded
-  from its own signed payload.
+  (RFC 8785 JCS, recursive drop-null) **with the whole `intake_control` excluded**,
+  reusing the normative `iplan_canonical` reference signer (`ed25519` preferred;
+  `hmac-sha256` for symmetric trust). Excluding `intake_control` (not just the
+  signature value) keeps the signed surface the plan content, stable under any
+  intake-time wrapper.
+- **Envelope:** a detached signature at `intake_control.provenance` —
+  `{ initiator_key_id, algorithm, value (lowercase hex), signed_at }` (an optional,
+  additive field on `iplan-document`; L0 omits it). Excluded from its own signed
+  payload per the rule above.
 - **Trust anchor:** the verifier resolves `initiator_key_id` to a public key via a
   configured **initiator keyring**. The conformant L1 baseline is a **signed
   authorized-initiator allowlist** (§9 R1); `initiator_key_id` resolution is an
@@ -180,8 +184,11 @@ option slots in additively (a MINOR bump), never a breaking rewrite.
   behind a thin mapping that keeps the IPLAN-native fields stable. Ecosystem
   interoperability over a bespoke format (§3).
 
-Remaining before ratification (mechanics, not open design): land the
-`intake_control` provenance envelope as an additive (MINOR) field on
-`iplan-document` + L1 golden vectors (`tests/contract/`), then ratify L1 via the
-framework CHG / GATE-SPEC. The keyless direction (§5) and REQUIRED-witness tier
-remain informative/future, not L1 conformance requirements.
+**Landed (this version):** the `intake_control.provenance` envelope is an additive
+optional field on `iplan-document`, and the L1 signed-plan golden vectors live in
+`tests/contract/provenance/vectors/` (`accept_ed25519`, `accept_hmac`,
+`reject_tampered`) with `test_provenance.py` pinning schema-validity + signature
+verification. **Remaining before ratification (governance, not open design):**
+ratify L1 via the framework CHG / GATE-SPEC, then consumers (iplanic, iplan-runner)
+re-pin and enforce. The keyless direction (§5) and the REQUIRED-witness tier remain
+informative/future, not L1 conformance requirements.

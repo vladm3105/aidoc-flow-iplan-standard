@@ -3,6 +3,30 @@
 All notable changes to the IPLAN standard are recorded here. The standard ships
 independently semver-tagged (`iplan/vX.Y.Z`); consumers pin a tag.
 
+## [Unreleased]
+
+Additive schema field + L1 conformance vectors (no breaking change). Part of the
+**IPLAN Assurance** ratification gate (see `docs/standards/IPLAN-ASSURANCE.md`).
+
+### Added
+
+- **`iplan-document.intake_control.provenance`** (optional) — the **L1 initiator
+  provenance envelope** (`{ initiator_key_id, algorithm, value, signed_at }`): a
+  detached signature over the canonical IPLAN with `intake_control` excluded.
+  Optional/additive — L0 documents omit it (backward-compatible; `schema_version`
+  unchanged, consistent with the `dispatch_token_id` precedent). The verifier
+  resolves `initiator_key_id` via a configured initiator keyring (baseline: a signed
+  allowlist; §9 R1).
+- **L1 signed-plan golden vectors** — `tests/contract/provenance/vectors/`
+  (`accept_ed25519`, `accept_hmac`, `reject_tampered`) with real signatures from the
+  `iplan_canonical` reference signer, pinned by `test_provenance.py` (schema-validity
+  + signature verification + L0-without-envelope still valid).
+- **`IPLAN-ASSURANCE.md` §9 resolved** — the three open questions ratified (R1 inline
+  allowlist baseline / IdP-ready; R2 witness OPTIONAL / REQUIRED-ready; R3 SLSA v1
+  predicate).
+
+Remaining for L1: ratify via the framework CHG / GATE-SPEC, then consumers re-pin.
+
 ## [0.3.0] — 2026-06-23
 
 Additive schema field (no breaking change; consumers may pin `iplan/v0.3.0`).

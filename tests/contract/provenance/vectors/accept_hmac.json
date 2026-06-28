@@ -1,0 +1,385 @@
+{
+  "description": "L1 accept: hmac-sha256 initiator signature (symmetric trust) verifies against the shared secret.",
+  "document": {
+    "metadata": {
+      "schema_version": "1.3-draft",
+      "document_type": "iplan-document",
+      "artifact_type": "IPLAN",
+      "iplan_id": "IPLAN-01",
+      "title": "[Plan title]",
+      "plan_version": "1.0.0",
+      "status": "Draft",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "author": "[Author]",
+      "source_framework": "aidoc-flow-framework",
+      "source_framework_version": "[Read-only reference version or commit]"
+    },
+    "intent": {
+      "summary": "[One sentence outcome]",
+      "problem": "[Problem this plan solves]",
+      "outcome": "[Observable result after successful execution]",
+      "success_criteria": [
+        "[Measurable success criterion]"
+      ],
+      "non_goals": [
+        "[Out of scope item]"
+      ]
+    },
+    "lineage": {
+      "upstream": {
+        "brd": [],
+        "prd": [],
+        "ears": [],
+        "bdd": [],
+        "adr": [],
+        "spec": [],
+        "tdd": []
+      },
+      "downstream": {
+        "code_paths": [],
+        "artifact_refs": [],
+        "evidence_refs": []
+      }
+    },
+    "scope": {
+      "in": [
+        "[Included work]"
+      ],
+      "out": [
+        "[Excluded work]"
+      ],
+      "assumptions": [
+        "[Assumption]"
+      ],
+      "constraints": [
+        "[Constraint]"
+      ]
+    },
+    "initialization": {
+      "required_status": "Approved",
+      "version_record_ref": "[version-record-ref]",
+      "validation_report_id": "[validation-report-id]",
+      "approval_event_id": "[approval-event-id]",
+      "approved_hash": {
+        "algorithm": "sha256",
+        "value": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "runtime_records": {
+        "execution_record_required": true,
+        "task_payloads_required": true,
+        "evidence_store_ready": true
+      }
+    },
+    "start_conditions": {
+      "required_state": "Approved",
+      "required_readiness": "ready",
+      "required_resources": [
+        "executor_available",
+        "write_scope_available",
+        "evidence_store_available"
+      ],
+      "policy_checks": [
+        "executor_authorized",
+        "tool_grants_approved",
+        "write_scope_allowed"
+      ],
+      "context_checks": [
+        "repository_base_ref_resolved",
+        "knowledge_refs_available",
+        "mcp_tools_available"
+      ],
+      "start_events": [
+        "task.assigned",
+        "task.accepted"
+      ]
+    },
+    "plan": {
+      "dependencies": [],
+      "parallel_safe_with": [],
+      "steps": [
+        {
+          "step_id": "STEP-001",
+          "title": "[Step title]",
+          "intent": "[Why this step exists]",
+          "dependencies": [],
+          "executor_capabilities": [
+            "code_edit"
+          ],
+          "target_files": [
+            {
+              "path": "[path/to/file]",
+              "action": "create"
+            }
+          ],
+          "commands": {
+            "setup": {
+              "items": [],
+              "not_applicable_reason": "[Why setup is not required, or null]"
+            },
+            "execute": {
+              "items": [
+                "[exact implementation command or instruction]"
+              ],
+              "not_applicable_reason": null
+            },
+            "verify": {
+              "items": [
+                "[exact verification command]"
+              ],
+              "not_applicable_reason": null
+            }
+          },
+          "executor_context": {
+            "repository": {
+              "url": "[repository-url]",
+              "default_branch": "main",
+              "base_ref": "[branch-or-commit]"
+            },
+            "workspace": {
+              "working_directory": "[repo-relative-working-directory]",
+              "write_scope": [
+                "[allowed/path/**]"
+              ],
+              "read_only_paths": [
+                "[read-only/reference/path]"
+              ]
+            },
+            "knowledge_refs": [
+              {
+                "ref_type": "spec",
+                "ref": "[knowledge-or-document-ref]",
+                "required": true
+              }
+            ],
+            "mcp_tools": [
+              {
+                "name": "[mcp-tool-name]",
+                "purpose": "[why the executor may use this tool]",
+                "required": false
+              }
+            ],
+            "secrets_policy": "no_secrets",
+            "forbidden_paths": [
+              "[path/executor/must-not-touch]"
+            ]
+          },
+          "executor_work": {
+            "work_order_id": "WORK-001",
+            "dispatchable": true,
+            "todos": [
+              {
+                "todo_id": "TODO-001",
+                "description": "[Concrete remote executor TODO]",
+                "type": "edit",
+                "priority": "P1",
+                "allowed_actions": [
+                  "read",
+                  "modify",
+                  "run_command",
+                  "submit_artifact"
+                ],
+                "acceptance_criteria": [
+                  "[Observable condition proving this TODO is complete]"
+                ],
+                "evidence_required": [
+                  {
+                    "event_type": "artifact.created",
+                    "artifact_type": "changed_file_manifest",
+                    "description": "[Evidence required for this TODO]"
+                  }
+                ],
+                "status": "Not Started"
+              }
+            ],
+            "reporting": {
+              "progress_events": [
+                "task.started",
+                "artifact.created"
+              ],
+              "completion_event": "task.completed",
+              "artifact_manifest_required": true,
+              "final_summary_required": true
+            }
+          },
+          "expected_outputs": [
+            "[Expected output]"
+          ],
+          "evidence_required": [
+            "execution_log",
+            "test_result"
+          ],
+          "failure_handling": {
+            "on_blocker": "Emit task.blocked with blocker details and stop mutating files.",
+            "on_ambiguity": "Request clarification before choosing an implementation path.",
+            "on_test_failure": "Attach failing output and mark the TODO blocked or failed.",
+            "on_policy_denial": "Stop the denied action and emit policy-denial evidence.",
+            "on_partial_completion": "Report completed TODOs, remaining TODOs, and changed files."
+          },
+          "status": "Not Started"
+        }
+      ]
+    },
+    "files": [
+      {
+        "path": "[path/to/test_file]",
+        "order": 1,
+        "owner_step_id": "STEP-001",
+        "action": "create",
+        "status": "Not Started",
+        "verified": false
+      },
+      {
+        "path": "[path/to/implementation_file]",
+        "order": 2,
+        "owner_step_id": "STEP-001",
+        "action": "create",
+        "status": "Not Started",
+        "verified": false
+      }
+    ],
+    "verification": {
+      "exec_ready_score": null,
+      "required_commands": [
+        {
+          "command": "[exact command]",
+          "expected_result": "[expected pass/fail]",
+          "required_for_completion": true
+        }
+      ],
+      "completion_criteria": [
+        "[Completion criterion]"
+      ]
+    },
+    "evidence_requirements": {
+      "required_events": [
+        "task.started",
+        "artifact.created",
+        "task.completed"
+      ],
+      "required_artifacts": [
+        {
+          "type": "test_result",
+          "description": "[Required test evidence]"
+        }
+      ],
+      "approvals": [
+        {
+          "role": "reviewer",
+          "required": false
+        }
+      ]
+    },
+    "completion_gate": {
+      "criteria": [
+        "all_required_steps_terminal",
+        "all_required_events_accepted",
+        "all_required_artifacts_accepted",
+        "all_verification_commands_passed",
+        "all_policy_gates_passed"
+      ],
+      "required_events": [
+        "task.completed"
+      ],
+      "required_artifacts": [
+        "changed_file_manifest",
+        "test_output"
+      ],
+      "evidence_bundle_required": true,
+      "final_state": "Completed"
+    },
+    "handoff": {
+      "current_state": "Not Started",
+      "resume_from_step": "STEP-001",
+      "blockers": [],
+      "sessions": []
+    },
+    "navigation": {
+      "blockers": [],
+      "deferred_items": [],
+      "cross_plan_obligations": [],
+      "temporary_handoffs": [
+        {
+          "handoff_id": "TMP-HANDOFF-001",
+          "tmp_iplan_id": "TMP-IPLAN-2026-06-01-example",
+          "direction": "iplan_to_tmp",
+          "source_ref": {
+            "artifact_type": "IPLAN",
+            "artifact_id": "IPLAN-01",
+            "plan_version_id": "[plan-version-id]",
+            "step_id": "STEP-001",
+            "work_order_id": "WORK-001",
+            "task_id": null,
+            "run_id": null
+          },
+          "target_ref": {
+            "artifact_type": "TMP-IPLAN",
+            "artifact_id": "TMP-IPLAN-2026-06-01-example",
+            "plan_version_id": null,
+            "step_id": "STEP-001",
+            "work_order_id": "WORK-001"
+          },
+          "reason": "[Why execution branches into a temporary plan]",
+          "status": "planned",
+          "expected_return": {
+            "resume_from_step": "STEP-001",
+            "required_evidence": [
+              "task.completed",
+              "changed_file_manifest"
+            ],
+            "acceptance_gate": "maintainer_review"
+          }
+        },
+        {
+          "handoff_id": "TMP-HANDOFF-001",
+          "tmp_iplan_id": "TMP-IPLAN-2026-06-01-example",
+          "direction": "tmp_to_iplan",
+          "source_ref": {
+            "artifact_type": "TMP-IPLAN",
+            "artifact_id": "TMP-IPLAN-2026-06-01-example",
+            "plan_version_id": null,
+            "step_id": "STEP-001",
+            "work_order_id": "WORK-001",
+            "task_id": null,
+            "run_id": null
+          },
+          "target_ref": {
+            "artifact_type": "IPLAN",
+            "artifact_id": "IPLAN-01",
+            "plan_version_id": "[plan-version-id]",
+            "step_id": "STEP-001",
+            "work_order_id": "WORK-001"
+          },
+          "reason": "[What evidence returned from the temporary plan]",
+          "status": "returned",
+          "expected_return": {
+            "resume_from_step": "STEP-001",
+            "required_evidence": [
+              "task.completed",
+              "changed_file_manifest"
+            ],
+            "acceptance_gate": "maintainer_review"
+          }
+        }
+      ],
+      "change_history": []
+    },
+    "intake_control": {
+      "provenance": {
+        "initiator_key_id": "init:conformance-2026",
+        "algorithm": "hmac-sha256",
+        "value": "05309278633519eb250a39562d0ffaa771f59ce140fd3b04671f629803cd5873",
+        "signed_at": "2026-06-28T00:00:00Z"
+      }
+    }
+  },
+  "keyring": {
+    "init:conformance-2026": {
+      "algorithm": "hmac-sha256",
+      "secret_hex": "69706c616e2d6173737572616e63652d6c312d636f6e666f726d616e63652d78"
+    }
+  },
+  "expected": {
+    "verifies": true
+  }
+}
