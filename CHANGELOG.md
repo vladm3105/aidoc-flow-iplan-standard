@@ -22,8 +22,9 @@ Additive schema field + L1 conformance vectors (no breaking change). Part of the
   `iplan_canonical` reference signer, pinned by `test_provenance.py` (schema-validity
   + signature verification + L0-without-envelope still valid).
 - **`IPLAN-ASSURANCE.md` §9 resolved** — the three open questions ratified (R1 inline
-  allowlist baseline / IdP-ready; R2 witness OPTIONAL / REQUIRED-ready; R3 SLSA v1
-  predicate).
+  allowlist baseline / IdP-ready; R2 witness OPTIONAL / REQUIRED-ready; R3
+  **IPLAN-native** in-toto predicate — amended 2026-06-28 from the initial SLSA-v1
+  wording: SLSA provenance subject-inverts the IPLAN; matches iplanic A4 / D-0109).
 
 Remaining for L1: ratify via the framework CHG / GATE-SPEC, then consumers re-pin.
 

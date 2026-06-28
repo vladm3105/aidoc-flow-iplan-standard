@@ -96,11 +96,14 @@ end-to-end checkable:
 signed IPLAN (initiator)  →  isolated execution  →  signed hash-chained ledger  →  evidence bundle
 ```
 
-The attestation format uses the **in-toto / SLSA v1** provenance predicate (§9 R3):
-subject = the IPLAN canonical digest; predicate = the execution ledger head and
-gate outcome, behind a thin mapping that keeps the IPLAN-native fields stable.
-Aligning to that ecosystem gives interoperable, already-credible tooling rather
-than a bespoke format.
+The attestation is an **in-toto Statement v1** with an **IPLAN-native
+`predicateType`** (§9 R3): subject = the IPLAN canonical digest; predicate = the
+execution ledger head and gate outcome. The in-toto Statement envelope gives
+interoperable, already-credible tooling; the predicate is **not**
+`slsa.dev/provenance/v1` because SLSA provenance's `subject` is the build *output*
+(inputs live in `resolvedDependencies`), whereas here the `subject` is the IPLAN —
+the *input/recipe* — so the SLSA predicate would subject-invert and misrepresent
+conformance.
 
 ## 4. L2 — transparency log
 
@@ -178,11 +181,15 @@ option slots in additively (a MINOR bump), never a breaking rewrite.
   **OPTIONAL** at L2; single-operator L2 is conformant. The STH/log design MUST
   admit **REQUIRED** witness cosigning as an additive top-tier policy (a future
   higher tier), so making it mandatory later does not break L2 verifiers.
-- **R3 — attestation predicate (was: SLSA v1 vs. IPLAN-native).** The evidence
-  attestation uses the **in-toto / SLSA v1 provenance predicate** (subject = the
-  IPLAN canonical digest; predicate = the execution ledger head + gate outcome),
-  behind a thin mapping that keeps the IPLAN-native fields stable. Ecosystem
-  interoperability over a bespoke format (§3).
+- **R3 — attestation predicate (was: SLSA v1 vs. IPLAN-native). Resolved
+  IPLAN-native (amended 2026-06-28).** The evidence attestation is an **in-toto
+  Statement v1** with an **IPLAN-native `predicateType`** (subject = the IPLAN
+  canonical digest; predicate = the execution ledger head + gate outcome). The
+  in-toto Statement envelope keeps interoperable, credible tooling; the predicate is
+  **not** `slsa.dev/provenance/v1` because SLSA provenance's `subject` is the build
+  *output* while here it is the IPLAN (the *input/recipe*) — claiming the SLSA
+  predicate would subject-invert. (Supersedes the earlier SLSA-v1 wording; matches
+  the first conformant producer, iplanic A4 / D-0109.)
 
 **Landed (this version):** the `intake_control.provenance` envelope is an additive
 optional field on `iplan-document`, and the L1 signed-plan golden vectors live in
