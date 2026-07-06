@@ -6,9 +6,22 @@ independently semver-tagged (`iplan/vX.Y.Z`); consumers pin a tag.
 ## [Unreleased]
 
 Additive schema field + L1 conformance vectors (no breaking change), part of the
-**IPLAN Assurance** ratification gate (see `docs/standards/IPLAN-ASSURANCE.md`);
-plus the DRAFT **Data & Log Interchange** investigation document (docs only, no
-schema change).
+**IPLAN Assurance** ratification gate (see `docs/standards/IPLAN-ASSURANCE.md`).
+The DRAFT **Data & Log Interchange** document + `ADR-0001` **moved out** to
+`aidoc-flow-interlog` (below).
+
+### Changed — Data & Log Interchange moved to Interlog (2026-07-06, interlog PLAN-002 PR-4)
+
+- **`docs/standards/DATA-INTERCHANGE.md` and `docs/adr/ADR-0001`** are now
+  **pointer stubs** — the interchange/logging standard and its
+  storage-independence ADR are owned by `aidoc-flow-interlog`, which a
+  founder-directed pivot made the owner of the ecosystem's horizontal logging
+  concern (private logging + monitoring + learning; interlog `docs/adr/ADR-0002`).
+  `iplan-standard` no longer defines the interchange contract.
+- **`docs/standards/IPLAN-ASSURANCE.md` §8** — added an informative interchange-
+  compliance note: `execution-event` / `iplan-evidence-bundle` are carried
+  unchanged as Interlog-envelope *payloads* (by `payload_type`, never `$ref`),
+  conforming to but not depending on the interchange contract. No schema change.
 
 ### Changed
 
