@@ -5,10 +5,22 @@ independently semver-tagged (`iplan/vX.Y.Z`); consumers pin a tag.
 
 ## [Unreleased]
 
-Additive schema field + L1 conformance vectors (no breaking change). Part of the
-**IPLAN Assurance** ratification gate (see `docs/standards/IPLAN-ASSURANCE.md`).
+Additive schema field + L1 conformance vectors (no breaking change), part of the
+**IPLAN Assurance** ratification gate (see `docs/standards/IPLAN-ASSURANCE.md`);
+plus the DRAFT **Data & Log Interchange** investigation document (docs only, no
+schema change).
 
 ### Added
+
+- **`docs/standards/DATA-INTERCHANGE.md`** (DRAFT / Investigation, non-normative) —
+  the ecosystem data & log interchange model: per-project log tiers
+  (private/exchange/distilled), the `experience-event` envelope sketch (schema NOT
+  yet landed; arrives as an additive change only at ratification, §7.7), exchange
+  models (shared git-native exchange repo → dedicated exchange service,
+  broker-neutral), roles (producer / consumer / memory plane / interchange
+  steward), and open-question recommendations (retention, signing via an
+  exchange-scoped assurance mapping, access control, naming, metrics, managed
+  broker choice).
 
 - **`iplan-document.intake_control.provenance`** (optional) — the **L1 initiator
   provenance envelope** (`{ initiator_key_id, algorithm, value, signed_at }`): a
