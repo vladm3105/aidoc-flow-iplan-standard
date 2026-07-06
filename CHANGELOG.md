@@ -22,6 +22,13 @@ schema change).
   exchange-scoped assurance mapping, access control, naming, metrics, storage +
   broker choice — store+notify: pub/sub is a transport, not storage; the
   append-only store is the record).
+- **`docs/adr/ADR-0001_exchange-storage-independent-of-execution-ledger.md`** —
+  decision record: the exchange store is independent of the executor's
+  assurance ledger (single-writer chain semantics, IPLAN-bound identity,
+  proof-surface separation, private-tier boundary, conflicting lifecycles)
+  and of the management-plane system-of-record (layering + the plane is
+  optional); ledger patterns and curated content projections are reused,
+  never the artifact.
 
 - **`iplan-document.intake_control.provenance`** (optional) — the **L1 initiator
   provenance envelope** (`{ initiator_key_id, algorithm, value, signed_at }`): a

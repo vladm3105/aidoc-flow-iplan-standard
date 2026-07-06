@@ -161,6 +161,7 @@ differ; the exchange-scoped meanings are:
 | **C — Shared exchange repo (git-native, no runtime)** | All producers commit envelope events into ONE dedicated git repository; consumers pull it | **Start.** Zero services; single point of discovery; git history is the cursor and the ordered record |
 | Federated per-producer publishing | Each producer publishes events in its own repo; consumers poll N repos | Rejected: consumers must discover and cursor N producers; completeness is unverifiable |
 | Code-hosting native eventing (webhooks / repository dispatch) | Push notifications from the hosting platform | Rejected as the record: delivery is ephemeral, there is no durable queryable store; MAY complement C/B as a notification trigger |
+| Execution ledger / management-plane store as exchange | Reuse the executor's assurance ledger or the management plane's system-of-record as the exchange store | Rejected: the ledger's hash chain is single-writer and IPLAN-bound, mixing learning events pollutes the proof surface, and full ledgers are private-tier (§2); the management plane is optional (executors are local-first), so standalone producers could not publish. Patterns and content are reused, never the artifact — see `docs/adr/ADR-0001_exchange-storage-independent-of-execution-ledger.md` |
 
 **Direction (investigation): B as target, C as the start, one repo housing
 both.** This follows the standard's governing principle — *contract above
@@ -396,6 +397,9 @@ against the workspace root).
 | 19 | The reference memory plane is at project-initiation phase | `Project initiation` | engramory/README.md:76 |
 | 20 | Memory-plane portability: self-hosted dev → GCP or Azure adapter swap | `Self-hosted for dev, portable to GCP or Azure` | engramory/README.md:42 |
 | 21 | A PostgreSQL transactional outbox is the standard's no-broker baseline | `PostgreSQL transactional outbox` | docs/standards/TRANSPORT-INTEGRATION.md:239 |
+| 22 | The executor ledger chain is strictly sequential (one writer per scope) | `event.get("sequence") != index + 1` | iplan-runner/platforms/hermes/src/iplan_hermes/ledger/store.py:28 |
+| 23 | A ledger binds to one source IPLAN by id + version + checksum | `` `id` + `version` + `checksum` `` | iplan-runner/README.md:28 |
+| 24 | Every management-plane store has a PostgreSQL adapter | `has a PostgreSQL adapter` | iplanic/README.md:77 |
 
 ## Appendix B — Review log
 
@@ -455,3 +459,13 @@ existence; deletion only via steward-approved waiver. Ledger row 21 added.
 Pre-push adversarial review (1 agent, docs-class): 1 blocker (§5 ↔ §7.1
 retention contradiction), 1 warn (outbox inference read as sourced), 3 nits
 — all fixed in this amendment.
+
+### Amendment - 2026-07-05 - ADR-0001 (exchange storage independence)
+
+Founder-confirmed decision recorded as
+`docs/adr/ADR-0001_exchange-storage-independent-of-execution-ledger.md`:
+neither the executor's assurance ledger nor the management-plane
+system-of-record serves as the exchange store; patterns (append-only +
+hash-chain, canonical signing) and content (curated ledger projections as
+payloads) are reused, never the artifact. §5 models table gains the
+corresponding rejected row; ledger rows 22–24 added.
