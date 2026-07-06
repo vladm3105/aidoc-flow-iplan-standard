@@ -244,7 +244,7 @@ to deployment docs at ratification.
 | Role | Workspace assignment |
 |---|---|
 | Standard | `iplan-standard` (this repo) |
-| Exchange repo | `aidoc-flow-exchange` (to be created; naming §7.4) |
+| Exchange repo | `aidoc-flow-interlog` (project name **Interlog**; to be created; naming §7.4) |
 | Memory plane | `engramory` (its `docs/MEMORY_DESIGN.md` defines the distilled tier internally) |
 | First producers | `aidoc-flow-operations` (decisions, handoffs, review verdicts — the author-side multi-agent review standard already emits a structured verdict shape) and `aidoc-flow-ci` (`ai-review/verdict.schema.json` — emission automatable in-workflow) |
 | Later producers | `iplanic` / `iplan-runner` (execution plane; Iplanic's built-in workers already include connector sync), `framework` (authoring outcomes) |
@@ -296,11 +296,17 @@ are deferred until a multi-tenant or external-consumer scenario exists.
 
 ### 7.4 Exchange repo naming
 
-**Recommendation:** `aidoc-flow-exchange`. It matches this document's
-vocabulary (exchange tier, interchange) and stays truthful at both phases —
-"bus"/"broker" names would over-promise delivery semantics the C-phase
-transport does not provide. ("Hub" is avoided: IPLAN-ECOSYSTEM.md already
-uses *hub* for the management-plane standard itself.)
+**Decision (reference deployment):** repo `aidoc-flow-interlog`, project name
+**Interlog** — the **inter**-project **log** interchange. A functional name,
+not a brand: the reference deployment defers a brand name until one is needed.
+"Interlog" is also the category term this document may use for the
+inter-project log interchange (as "engramory" names the memory plane). The
+descriptive form stays truthful at both phases — "bus"/"broker" names would
+over-promise delivery semantics the C-phase transport does not provide, and
+"hub" is avoided because IPLAN-ECOSYSTEM.md already uses *hub* for the
+management-plane standard itself. The architectural noun in this document's
+normative body remains **the exchange**; `aidoc-flow-interlog` / Interlog is
+the reference implementation of it.
 
 ### 7.5 Improvement metrics (loop verification)
 
