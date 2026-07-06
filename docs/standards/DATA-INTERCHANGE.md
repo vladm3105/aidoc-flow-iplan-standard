@@ -188,13 +188,34 @@ pull + commit-cursor → service query/subscribe). Producers switch from
 commit-to-repo to publish-to-API. The claim is envelope stability, not zero
 integration work.
 
+**B architecture: store + notify.** The exchange service is two layers, of
+which only the first is required — and only the first is the record:
+
+- **The store (normative):** an append-only, replayable record of every
+  admitted envelope event. A consumer that subscribes late — months after
+  events were published — MUST be able to read the full history from the
+  beginning. This is the property the interchange exists for; the store is
+  the exchange.
+- **The notify layer (optional):** pub/sub delivery that pushes new events to
+  live subscribers so they do not poll. **Pub/sub is a transport, not
+  storage**: managed pub/sub services bound message retention to a window of
+  days, so a late subscriber cannot rely on the broker for history. Even
+  where a broker retains longer (e.g. a log-based broker with extended
+  retention), the design stance is unchanged: the broker is never the
+  record. A deployment that used pub/sub *as* the exchange would silently
+  violate the late-consumer property above.
+
+Admission order is store-first: an event is admitted when durably written to
+the store; notification follows. A consumer must be able to reconcile
+against the store regardless of notification delivery.
+
 **B implementation options.** The service contract is broker-neutral, per the
 same §8 precedent (a transactional-outbox store serves the no-broker
-deployment; a broker is added at scale). Managed cloud pub/sub — GCP Pub/Sub,
-Azure Service Bus / Event Grid — or self-hosted NATS/Kafka are all admissible
-backings; the broker family is already anticipated by
-TRANSPORT-INTEGRATION.md §8 (NATS / Kafka / Pub-Sub). The choice is deferred
-to the B phase (§7.6).
+deployment; a broker is added at scale). For the notify layer, managed cloud
+pub/sub — GCP Pub/Sub, Azure Service Bus / Event Grid — or self-hosted
+NATS/Kafka are all admissible; the broker family is already anticipated by
+TRANSPORT-INTEGRATION.md §8 (NATS / Kafka / Pub-Sub). The broker choice is
+deferred to the B phase; the storage recommendation is in §7.6.
 
 ### Roles
 
@@ -243,11 +264,17 @@ Recommendations recorded for ratification review; none are locked.
 
 ### 7.1 Retention
 
-**Recommendation:** exchange tier is append-only; retain indefinitely during
-the investigation/MVP phase (volume is small). Define per-kind retention when
-the exchange-service phase begins. Retention here is a learning-utility
-decision, not a compliance one — the assurance path (§3) is the durable
-record, so the exchange may forget without loss of proof.
+**Recommendation:** the exchange tier is append-only and the record retains
+full history — the late-consumer property (§5) requires it. During the
+investigation/MVP phase everything is retained as-is (volume is small). When
+the exchange-service phase begins, per-kind retention decisions govern
+**tier placement** — which events stay in the hot store versus move to the
+archival tier (§7.6) — not whether history exists; the full record remains
+readable across tiers. Deleting a kind's history is possible only by an
+explicit, steward-approved waiver of the late-consumer property for that
+kind, recorded in the kind registry. The assurance path (§3) remains the
+durable proof regardless — the exchange record serves learning, not
+compliance.
 
 ### 7.2 Signing
 
@@ -285,14 +312,34 @@ contract only guarantees the events needed to compute them. Metrics are
 computable only after the §6 minimal viability condition is met (that
 condition moves to deployment docs together with §6 at ratification).
 
-### 7.6 Managed broker choice (B phase)
+### 7.6 Storage and broker choice (B phase)
 
-**Recommendation:** defer. The envelope and service contract are
-broker-neutral (§5); GCP Pub/Sub and Azure Service Bus / Event Grid are both
-admissible, and the reference memory plane's portability principle
-(self-hosted dev → GCP or Azure as an adapter swap) suggests the same
-posture: choose per deployment at the B phase, encode nothing
-provider-specific in the contract.
+**Storage recommendation (the record, §5 store+notify):**
+
+- **C phase:** the exchange repo itself — git already is an append-only,
+  replayable, content-hashed store; no additional storage is stood up.
+- **B phase primary store:** an append-only event table in **PostgreSQL**.
+  The transport standard already establishes PostgreSQL as its no-broker
+  baseline (transactional outbox, TRANSPORT-INTEGRATION.md §8); the exchange
+  adapts that pattern with one deliberate divergence — the event table is
+  the permanent record, not a pruned relay staging table. Store-first
+  admission (§5) follows when the event row and the notification intent
+  commit in one transaction and a relay publishes after commit.
+- **Archival / analytics tier (optional):** object storage (e.g. GCS or
+  Azure Blob) for cold history, and a columnar warehouse for metric queries
+  (§7.5). On managed clouds this tier can be fed directly by the notify
+  layer (e.g. broker export/capture subscriptions) rather than by custom
+  glue — informative, not contracted.
+
+**Broker recommendation (the notify layer only):** defer the provider. The
+envelope and service contract are broker-neutral (§5); GCP Pub/Sub and Azure
+Service Bus / Event Grid are both admissible, and the reference memory
+plane's portability principle (self-hosted dev → GCP or Azure as an adapter
+swap) suggests the same posture: choose per deployment at the B phase,
+encode nothing provider-specific in the contract. Whatever the choice, the
+broker is never the record — retention windows on managed pub/sub are
+measured in days, and the late-consumer property (§5) holds regardless of
+provider choice.
 
 ### 7.7 Versioning axis at schema landing
 
@@ -348,6 +395,7 @@ against the workspace root).
 | 18 | The broker family NATS / Kafka / Pub-Sub is already anticipated | `NATS / Kafka / Pub-Sub` | docs/standards/TRANSPORT-INTEGRATION.md:230 |
 | 19 | The reference memory plane is at project-initiation phase | `Project initiation` | engramory/README.md:76 |
 | 20 | Memory-plane portability: self-hosted dev → GCP or Azure adapter swap | `Self-hosted for dev, portable to GCP or Azure` | engramory/README.md:42 |
+| 21 | A PostgreSQL transactional outbox is the standard's no-broker baseline | `PostgreSQL transactional outbox` | docs/standards/TRANSPORT-INTEGRATION.md:239 |
 
 ## Appendix B — Review log
 
@@ -391,3 +439,19 @@ body confirmed free of workspace-internal identifiers outside the informative
 (placeholder wording in envelope examples, an unmarked informative aside,
 CHANGELOG preamble coverage, three rhetorical phrasings, a §7.5 pointer note)
 — all fixed in this revision. **Result:** ready
+
+### Amendment - 2026-07-05 - store + notify
+
+Post-merge amendment (founder-directed): §5 gains the **store + notify**
+architecture for the B-phase exchange service — pub/sub is a transport, not
+storage; the append-only replayable store is the normative record
+(late-consumer property), notification is an optional layer, admission is
+store-first. §7.6 retitled "Storage and broker choice" with the storage
+recommendation (C: the exchange repo; B: PostgreSQL append-only event table
+adapting the transport standard's transactional-outbox baseline; optional
+object storage / warehouse archival tier). §7.1 reconciled with the
+late-consumer property: per-kind retention governs tier placement, not
+existence; deletion only via steward-approved waiver. Ledger row 21 added.
+Pre-push adversarial review (1 agent, docs-class): 1 blocker (§5 ↔ §7.1
+retention contradiction), 1 warn (outbox inference read as sourced), 3 nits
+— all fixed in this amendment.

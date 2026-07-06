@@ -19,8 +19,9 @@ schema change).
   models (shared git-native exchange repo → dedicated exchange service,
   broker-neutral), roles (producer / consumer / memory plane / interchange
   steward), and open-question recommendations (retention, signing via an
-  exchange-scoped assurance mapping, access control, naming, metrics, managed
-  broker choice).
+  exchange-scoped assurance mapping, access control, naming, metrics, storage +
+  broker choice — store+notify: pub/sub is a transport, not storage; the
+  append-only store is the record).
 
 - **`iplan-document.intake_control.provenance`** (optional) — the **L1 initiator
   provenance envelope** (`{ initiator_key_id, algorithm, value, signed_at }`): a
