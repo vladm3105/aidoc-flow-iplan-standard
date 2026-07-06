@@ -10,6 +10,12 @@ Additive schema field + L1 conformance vectors (no breaking change), part of the
 plus the DRAFT **Data & Log Interchange** investigation document (docs only, no
 schema change).
 
+### Changed
+
+- **`DATA-INTERCHANGE.md` §6/§7.4** — exchange reference-deployment repo named:
+  `aidoc-flow-interlog`, project name **Interlog** (functional, brand deferred).
+  Replaces the `aidoc-flow-exchange` placeholder.
+
 ### Added
 
 - **`docs/standards/DATA-INTERCHANGE.md`** (DRAFT / Investigation, non-normative) —
