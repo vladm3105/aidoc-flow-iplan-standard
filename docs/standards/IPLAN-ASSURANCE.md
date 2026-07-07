@@ -164,6 +164,16 @@ Builds on `IPLAN-CANONICALIZATION.md` (the normative signer), and the
 Adds the assurance-level vocabulary, the `intake_control` provenance envelope, the
 `INTAKE.PROVENANCE` rules, and the L2 transparency-log contract.
 
+**Interchange compliance (informative).** The `execution-event` and
+`iplan-evidence-bundle` schemas are also carried, unchanged, as **payloads** of
+the Interlog log-interchange envelope (`experience-event`), referenced by
+`payload_type` — never `$ref`-ed by the envelope. The interchange contract is
+owned by `aidoc-flow-interlog`
+([`docs/standards/DATA-INTERCHANGE.md`](https://github.com/vladm3105/aidoc-flow-interlog/blob/main/docs/standards/DATA-INTERCHANGE.md));
+these IPLAN domain shapes **conform to** that envelope but do not depend on it,
+and it does not depend on them. Assurance verification always resolves against
+the assurance path here, never against the interchange.
+
 ## 9. Resolved decisions (ratification gate)
 
 Resolved 2026-06-28 to unblock L1 ratification. The stance throughout: ship the
