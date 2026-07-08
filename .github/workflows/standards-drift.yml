@@ -1,0 +1,36 @@
+# standards-drift — weekly server-side canon drift check.
+#
+# Runs `bash sync/check-standards-drift.sh --tier governance` from the
+# aidoc-flow-ci canon (fetched via curl) — see PLAN-002 §5.5 Wave 1
+# governance-tier rollout.
+#
+# WARNING-ONLY per canon §3.1b — the script always exits 0; drift emits
+# `::warning::` annotations for operator visibility, never blocks.
+
+name: standards-drift
+
+on:
+  schedule:
+    # Monday 09:00 UTC — early-week visibility for accumulated drift.
+    - cron: '0 9 * * 1'
+  workflow_dispatch:  # manual re-run
+
+jobs:
+  drift:
+    name: check-standards-drift
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Fetch drift-check script from aidoc-flow-ci canon
+        run: |
+          mkdir -p sync
+          curl -fsSL "https://raw.githubusercontent.com/vladm3105/aidoc-flow-ci/ci/v1.6.0/sync/check-standards-drift.sh" -o sync/check-standards-drift.sh
+          chmod +x sync/check-standards-drift.sh
+
+      - name: Run standards drift check (tier=governance)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash sync/check-standards-drift.sh --tier governance

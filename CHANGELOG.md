@@ -10,6 +10,54 @@ Additive schema field + L1 conformance vectors (no breaking change), part of the
 The DRAFT **Data & Log Interchange** document + `ADR-0001` **moved out** to
 `aidoc-flow-interlog` (below).
 
+### Added — Wave 1 governance-tier adoption of aidoc-flow-ci canon (PLAN-002 §5.5) (2026-07-08)
+
+Self-adopts the workspace-wide standards canon from `aidoc-flow-ci@ci/v1.6.0`
+per PLAN-002 §5.5 Wave 1 (governance tier). Adds mechanical OPS-0069 audit-trail
+enforcement + workspace-baseline governance surfaces. 9 file surfaces + this
+CHANGELOG entry (atomic canon-adoption bundle per PLAN-002 §5.5 explicit
+exemption to OPS-0061 Rule 1's ≤3-surface cap; same precedent as PR-U4 on
+aidoc-flow-ci):
+
+- **`scripts/pre_push_check.sh`** (NEW) — canon self-review script from
+  `aidoc-flow-ci/install/templates/pre_push_check.sh` at `ci/v1.6.0`. Runs 5
+  checks pre-push: markdownlint / yamllint / actionlint / shellcheck (all
+  skipped-with-notice if absent) + OPS-0069 audit-trail phrase check
+  (mandatory).
+- **`.pre-commit-config.yaml`** (NEW) — canon fragment wiring the pre-push
+  hook via `default_install_hook_types: [pre-commit, pre-push]`. Carries
+  the `# CANON: aidoc-flow-ci pre_push_check` idempotency marker so future
+  `install.sh` re-runs no-op.
+- **`.github/CODEOWNERS`** (NEW) — canon shape per `REPO_STANDARDS.md` §7
+  (single-owner phase; all patterns route to `@vladm3105`).
+- **`.github/pull_request_template.md`** (NEW) — canon PR template per
+  `REPO_STANDARDS.md` §8 (Summary + Files-touched Rule 1 self-check +
+  Multi-agent self-review + Cross-refs + tier-guarded test plan).
+- **`.github/dependabot.yml`** (NEW) — FULL canon per `REPO_STANDARDS.md`
+  §6 (5 ecosystems; Dependabot silently skips ecosystems with no matching
+  manifests).
+- **`.gitignore`** (edit) — merged canon baseline lines per
+  `REPO_STANDARDS.md` §10.1 (subset semantics; existing entries retained).
+- **`.gitattributes`** (NEW) — canon baseline per `REPO_STANDARDS.md`
+  §10.2.
+- **`.github/workflows/audit-trail.yml`** (NEW) — consumer caller wiring
+  the `audit-trail-check.yml` reusable at `@ci/v1.6.0`. Check-name renders
+  as `call / verify`. Adds mechanical OPS-0069 audit-trail enforcement to
+  every PR on this repo.
+- **`.github/workflows/standards-drift.yml`** (NEW) — weekly `schedule:
+  cron` job that fetches `sync/check-standards-drift.sh` from
+  aidoc-flow-ci canon at runtime and runs it with `--tier governance`.
+  Warning-only per canon §3.1b (script always exits 0).
+
+**Server-side follow-up:** adding `call / verify` to branch-protection
+`contexts` on `main` requires a founder-run `bash install/apply-standards.sh
+--apply --repo vladm3105/aidoc-flow-iplan-standard --tier governance --ci-tag
+ci/v1.6.0 --yes` per `REPO_STANDARDS.md` §14.3 (governance tier). F5
+blast-radius; not in this PR.
+
+**Origin:** `aidoc-flow-ci/plans/PLAN-002_workspace-standards-rollout.md`
+§5.5 Wave 1 (governance tier). Sibling Wave 1 rollout: `aidoc-flow-framework`.
+
 ### Changed — Data & Log Interchange moved to Interlog (2026-07-06, interlog PLAN-002 PR-4)
 
 - **`docs/standards/DATA-INTERCHANGE.md` and `docs/adr/ADR-0001`** are now

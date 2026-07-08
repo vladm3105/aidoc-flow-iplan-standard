@@ -5,3 +5,19 @@ __pycache__/
 *.egg-info/
 .venv/
 .ruff_cache/
+
+# --- aidoc-flow-ci canon baseline (PLAN-002 §10.1) ---
+.claude/
+.review/
+tmp/
+scratch/
+.env
+.env.*
+!.env.example
+dist/
+build/
+node_modules/
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db
