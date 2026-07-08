@@ -45,6 +45,15 @@ transport/ecosystem prose specs (the A2A/MCP narrative) are being curated for a 
 will land in a subsequent minor; the machine-readable transport contracts (`task`, `execution-event`,
 `executor-registration` schemas) are already here.
 
+## Governance + cross-session state
+
+Repo-level governance + operational tracking follows the aidoc-flow
+workspace canon (`aidoc-flow-ci@ci/v1.6.0`). See
+[`CLAUDE.md ## Per-repo governance`](CLAUDE.md#per-repo-governance-—-this-repo-owns-its-own-continuity)
+for the durable surfaces (`HANDOFF.md` / `DECISIONS.md` / `ROADMAP.md` /
+`plans/`). Substantive standard evolution goes through the framework
+CHG / GATE-SPEC process referenced by [`GOVERNANCE.md`](GOVERNANCE.md).
+
 ## License
 
 [MIT](LICENSE).
