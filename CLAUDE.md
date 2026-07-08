@@ -11,11 +11,48 @@ downstream product code.
 ## Where things are
 
 - `iplan_canonical/` — canonical IPLAN structures
-- `schemas/` — JSON schemas
-- `docs/standards/` — standard-authoring docs
-- `GOVERNANCE.md` — governance model
+- `schemas/` — JSON schemas (the normative machine-readable spec)
+- `docs/standards/` — the prose spec (IPLAN-STANDARD, IPLAN-ASSURANCE,
+  VERSIONING, etc.). **Substantive standard changes evolve here**
+  through the framework CHG / GATE-SPEC ratification process.
+- `GOVERNANCE.md` — pointer to the framework governance model
+  (CHG / GATE-SPEC) + local OPS-NNNN deltas. NOT the substantive
+  standard content.
 - `CONTRIBUTING.md` — how to contribute
 - `CHANGELOG.md` — chronological index of changes
+- `HANDOFF.md` / `DECISIONS.md` / `ROADMAP.md` / `plans/` — workspace-
+  canon durable governance surfaces (PLAN-003 §4.2; see
+  `## Per-repo governance` below). Track **repo-level operational +
+  workspace-standard-adoption** decisions, distinct from substantive
+  standard evolution in `docs/standards/`.
+
+## Per-repo governance — this repo owns its own continuity
+
+The `aidoc-flow` workspace is **multi-repo**. Each repo governs its own
+activity tracking; cross-session continuity is per-repo. The durable
+surfaces for **this** repo:
+
+| Surface | Path (in this repo) |
+| --- | --- |
+| Live HANDOFF | `HANDOFF.md` |
+| TODO / backlog | Not adopted — `HANDOFF.md` open threads + `plans/` per-initiative plans serve as the backlog |
+| Decisions log | `DECISIONS.md` |
+| Plans | `plans/` |
+| Changelog | `CHANGELOG.md` |
+| Roadmap | `ROADMAP.md` |
+| _(repo-specific rows below — same table, optional)_ | |
+| Framework-governance pointer + local OPS-NNNN deltas | `GOVERNANCE.md` |
+
+`GOVERNANCE.md` is a POINTER to the workspace-wide governance model
+maintained in the framework repo (CHG / GATE-SPEC ratification), plus
+local OPS-NNNN adoption deltas. It is NOT a substantive-standard-decision
+log. Substantive standard evolution lives in `docs/standards/*.md`
+under CHG / GATE-SPEC; repo-level operational + workspace-standard
+adoption decisions log in `DECISIONS.md`.
+
+Never in `tmp/` (transient). Never in the umbrella `aidoc-flow/` (holds
+no dev). Cross-repo coordination captured here references siblings by
+path (`../<repo>/`), never relocates their state.
 
 ## GitHub operations
 

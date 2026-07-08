@@ -10,6 +10,65 @@ Additive schema field + L1 conformance vectors (no breaking change), part of the
 The DRAFT **Data & Log Interchange** document + `ADR-0001` **moved out** to
 `aidoc-flow-interlog` (below).
 
+### Added — Wave 1b adoption of aidoc-flow-ci PLAN-003 governance-file canon (2026-07-08)
+
+This repo adopts the PLAN-003 flexible-canonical (Option B) project-
+governance file canon shipped by `aidoc-flow-ci@ci/v1.6.0` (design at
+`aidoc-flow-ci/plans/PLAN-003_project-governance-canon.md`; canon
+delivered via `aidoc-flow-ci#73`, `aidoc-flow-ci#74`,
+`aidoc-flow-operations#217`, `aidoc-flow-ci#75` = PR-V1/V2/V3/V4 on
+2026-07-08).
+
+This repo had the **biggest gap** in the workspace pre-Wave-1b — no
+`HANDOFF.md` / `DECISIONS.md` / `ROADMAP.md` / `plans/` before this PR.
+Per PLAN-003 §5.4c iplan-standard row + §5.5 Wave 1: create all 4 from
+templates + add `## Per-repo governance` H2 section to `CLAUDE.md`.
+
+Governance drift check (`bash ../aidoc-flow-ci/install/apply-standards.sh
+--check`) now reports **exit 0** on all surfaces (no drift).
+
+- **`HANDOFF.md`** (NEW at repo root) — live cross-session resume; seeded
+  with Wave 1b state + active surfaces (IPLAN-Assurance L1 ratification,
+  Interlog extraction).
+- **`DECISIONS.md`** (NEW at repo root) — append-only decision log for
+  repo-level operational + workspace-standard-adoption decisions; seeded
+  with `IS-0001` (this Wave 1b adoption). ID prefix: `IS-NNNN`.
+  **Not for** substantive standard evolution — that goes through the
+  framework CHG / GATE-SPEC process referenced by `GOVERNANCE.md`,
+  landing in `docs/standards/*.md`.
+- **`ROADMAP.md`** (NEW at repo root) — Current phase = additive
+  maintenance + IPLAN-Assurance L1 ratification; Deferred item = PLAN-003
+  §5.4c link-summary retrofit (rename `## Multi-agent automated review`
+  → canonical `## Workspace standards` per §4.3 + apply §4.2 H5
+  path-with-summary format).
+- **`plans/README.md`** (NEW; creates `plans/` dir) — plan naming
+  convention + verified-planning skill contract per canon.
+- **`CLAUDE.md`** — new `## Per-repo governance` H2 section declaring
+  the 6 required rows (HANDOFF, TODO Not-adopted, Decisions, Plans,
+  Changelog, Roadmap) + 1 additional row for `GOVERNANCE.md` (correctly
+  characterized as framework-governance pointer + local OPS-NNNN deltas,
+  NOT substantive-standard decisions). `Where things are` cross-references
+  the 4 new files + clarifies `docs/standards/` as the substantive
+  spec home.
+- **`README.md`** — added `## Governance + cross-session state` pointer
+  to `CLAUDE.md ## Per-repo governance` — added per docs-specialist
+  review; ensures README (natural OSS cold-start entry point) does not
+  hide the new governance surfaces.
+- **`CHANGELOG.md`** — this entry.
+
+**7 surfaces** — expanded from initial 6 to 7 after documentation-
+specialist review surfaced README-not-updated gap. Above OPS-0061 Rule 1
+≤3 default. Bundle authorized by explicit founder OK 2026-07-08
+(analogous to `aidoc-flow-ci#73` 11-surface PR-V1 precedent per
+PLAN-002 §5.4 dogfood-in-canon-PR pattern).
+
+Deferred to follow-up PR:
+
+- Link-summary retrofit + section-name canonicalization (see ROADMAP
+  Deferred / parked).
+
+Multi-agent self-review per OPS-0065 (code-reviewer + documentation-specialist parallel dispatch): approved after 1 fold cycle addressing 3 HIGH (governance-md mischaracterization — corrected framing across all 6 files: GOVERNANCE.md is a framework-governance pointer + OPS-NNNN deltas, not substantive standard content; charter/discovery mislabel — corrected to accurate "stable neutral standard in additive-only maintenance at iplan/v0.1.0 + active IPLAN-Assurance L1 ratification" framing; CHANGELOG TBD → filled) + 4 MEDIUM (DECISIONS.md unqualified PR-V3 → `aidoc-flow-operations#217`; HANDOFF open threads misroute to GOVERNANCE.md → rewritten to point at real live surfaces IPLAN-ASSURANCE.md §9 + Interlog compliance note; README pointer to governance surfaces — added; Wave 1b terminology sub-designation clarified in IS-0001 Origin) + 6 LOW (aidoc-flow-canon vs workspace-CI-canon wording; HANDOFF pruning-rule prescriptive framing; plans/README ../operations/ assumption noted; CLAUDE.md TODO rationale shortened; DECISIONS.md redundant separator removed; various wording polish)
+
 ### Added — Wave 1 governance-tier adoption of aidoc-flow-ci canon (PLAN-002 §5.5) (2026-07-08)
 
 Self-adopts the workspace-wide standards canon from `aidoc-flow-ci@ci/v1.6.0`
