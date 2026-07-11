@@ -5,6 +5,11 @@ independently semver-tagged (`iplan/vX.Y.Z`); consumers pin a tag.
 
 ## [Unreleased]
 
+### Added — canon secret-scan (gitleaks) workflow (2026-07-11)
+
+Adopted the aidoc-flow-ci secret-scan gate (@ci/v1.9.2, gitleaks binary).
+
+
 ### Added — auto-merge-ai-prs.yml caller (server-side auto-merge for AI-opened PRs) (2026-07-08)
 
 Adopts the canonical `auto-merge-ai-prs.yml` caller from
