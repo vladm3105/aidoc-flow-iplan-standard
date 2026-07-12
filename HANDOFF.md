@@ -74,3 +74,5 @@ history lives in `CHANGELOG.md` + git commit log._
   entry ID if load-bearing) or to git commit history.
 - Prune `Recent decisions` — entries older than 4 weeks belong only in
   `DECISIONS.md`.
+
+<!-- composition gate verification 2026-07-12 -->
