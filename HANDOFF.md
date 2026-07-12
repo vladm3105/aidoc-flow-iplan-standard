@@ -7,6 +7,12 @@ refresh at milestones and before context compaction.
 
 ## Current state (2026-07-08)
 
+**CI gate stack complete (2026-07-12):** ai-review + composition activated
+(reviewer App provisioned; `APP_REVIEWER_1_BOT_ID` var set), joining the
+content-check surface (secret-scan / links / markdown-lint / labeler /
+docs-sync) + pre-commit + audit-trail + auto-merge already adopted from
+`aidoc-flow-ci`.
+
 **PLAN-003 Wave 1b adoption** — first substantive governance-file
 adoption on this repo. Prior state: only `CHANGELOG.md` and a small
 `CLAUDE.md`; no HANDOFF / DECISIONS / ROADMAP / plans dir. Wave 1b
