@@ -7,6 +7,10 @@ independently semver-tagged (`iplan/vX.Y.Z`); consumers pin a tag.
 
 ### Added
 
+- **ai-review + composition gates** — added `.github/workflows/ai-review.yml` + `composition.yml` (callers of aidoc-flow-ci reusables @ci/v1.9.5); reviewer App provisioned (secrets + APP_REVIEWER_1_BOT_ID var). Closes the last gate gap (docs/WORKFLOWS.md §2.1).
+
+### Added
+
 - **`pre-commit` CI gate** — added `.github/workflows/pre-commit.yml` (caller of the aidoc-flow-ci reusable @ci/v1.9.5), closing the gate gap in docs/WORKFLOWS.md §2.1.
 
 ### Added — canon docs-sync workflow (dry-run) (2026-07-11)
