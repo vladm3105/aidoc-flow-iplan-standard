@@ -5,6 +5,10 @@ independently semver-tagged (`iplan/vX.Y.Z`); consumers pin a tag.
 
 ## [Unreleased]
 
+### Changed
+
+- **Re-pin aidoc-flow-ci callers to @ci/v1.9.5** — version-only bump of stale `@ci/vX.Y.Z` pins to the current canon (per `sync/check-pin-currency.sh`). Topology preserved.
+
 ### Added
 
 - **ai-review + composition gates** — added `.github/workflows/ai-review.yml` + `composition.yml` (callers of aidoc-flow-ci reusables @ci/v1.9.5); reviewer App provisioned (secrets + APP_REVIEWER_1_BOT_ID var). Closes the last gate gap (docs/WORKFLOWS.md §2.1).
