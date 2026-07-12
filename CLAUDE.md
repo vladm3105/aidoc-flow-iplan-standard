@@ -4,8 +4,8 @@ Operating notes for Claude Code sessions in this repo. Read first.
 
 ## What this repo is
 
-The **IPLAN standard** — canonical schemas + IPLAN Assurance framework. Docs
-+ JSON schemas + test fixtures. Consumed by `iplan-runner` (OSS execute) and
+The **IPLAN standard** — canonical schemas + IPLAN Assurance framework. Docs +
+JSON schemas + test fixtures. Consumed by `iplan-runner` (OSS execute) and
 downstream product code.
 
 ## Where things are

@@ -92,7 +92,7 @@ The `iplan-evidence-bundle` SHOULD carry an **attestation** binding the
 **signed plan** to the **signed execution ledger**, so the custody chain is
 end-to-end checkable:
 
-```
+```text
 signed IPLAN (initiator)  →  isolated execution  →  signed hash-chained ledger  →  evidence bundle
 ```
 
