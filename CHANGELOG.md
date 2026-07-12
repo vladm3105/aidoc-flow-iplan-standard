@@ -7,6 +7,7 @@ independently semver-tagged (`iplan/vX.Y.Z`); consumers pin a tag.
 
 ### Changed
 
+- **markdown-lint graduated to blocking (PLAN-007 W3)** — adopted the relaxed canon `.markdownlint.json` (disables MD013/MD024/MD036 per the workspace doc-style decision), cleared the residual violations (backticked `<verdict>`/`<domain-specific>` placeholders in the PR template, added a `text` language to a bare code fence, reflowed two prose lines whose literal `+` was misread as a list marker), and flipped `fail-on-findings: false → true`. Arming it as a required status check is the separate founder-executed W4 step (FT-11).
 - **Re-pin aidoc-flow-ci callers to @ci/v1.9.5** — version-only bump of stale `@ci/vX.Y.Z` pins to the current canon (per `sync/check-pin-currency.sh`). Topology preserved.
 
 ### Added
@@ -38,11 +39,9 @@ remediation pass.
 
 Adopted aidoc-flow-ci labeler (@ci/v1.9.3) + config for this repo labels.
 
-
 ### Added — canon secret-scan (gitleaks) workflow (2026-07-11)
 
 Adopted the aidoc-flow-ci secret-scan gate (@ci/v1.9.2, gitleaks binary).
-
 
 ### Added — auto-merge-ai-prs.yml caller (server-side auto-merge for AI-opened PRs) (2026-07-08)
 
@@ -222,8 +221,8 @@ blast-radius; not in this PR.
   allowlist; §9 R1).
 - **L1 signed-plan golden vectors** — `tests/contract/provenance/vectors/`
   (`accept_ed25519`, `accept_hmac`, `reject_tampered`) with real signatures from the
-  `iplan_canonical` reference signer, pinned by `test_provenance.py` (schema-validity
-  + signature verification + L0-without-envelope still valid).
+  `iplan_canonical` reference signer, pinned by `test_provenance.py` (schema-validity +
+  signature verification + L0-without-envelope still valid).
 - **`IPLAN-ASSURANCE.md` §9 resolved** — the three open questions ratified (R1 inline
   allowlist baseline / IdP-ready; R2 witness OPTIONAL / REQUIRED-ready; R3
   **IPLAN-native** in-toto predicate — amended 2026-06-28 from the initial SLSA-v1
