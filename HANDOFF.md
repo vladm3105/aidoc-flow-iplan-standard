@@ -32,6 +32,15 @@ above OPS-0061 Rule 1 ≤3 default authorized by explicit founder OK
 
 ## Open threads
 
+- **PLAN-0001 docs-review remediation** — READY (2026-07-19; 3 review
+  passes, 2 independent). Four-agent documentation review found 29
+  consolidated findings (release-truth staleness incl. the un-flipped
+  GD-04 ratification state, schema-contract defects, prose
+  inconsistencies, standards-practice gaps). Execute per
+  `plans/PLAN-0001_docs-review-remediation.md` — Wave 1 (release-truth
+  sync) first; Wave 3 + W2.1/W4.1/W4.3 need a framework CHG/GATE-SPEC
+  entry before their PRs. Note: W1.2/W1.4 supersede the "IPLAN-Assurance
+  L1 ratification" thread below (ratification already happened — GD-04).
 - **IPLAN-Assurance L1 ratification** — advance the R1/R2/R3 ratification
   scoped in `docs/standards/IPLAN-ASSURANCE.md §9`. Next concrete step:
   L1 golden-vector coverage + `intake_control.provenance` additive
