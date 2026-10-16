@@ -121,12 +121,12 @@ class SchemaContractTests(unittest.TestCase):
         )
 
     def test_protocol_schemas_use_executor_identity(self) -> None:
-        for schema_name in {
+        for schema_name in (
             "artifact.schema.json",
             "execution-event.schema.json",
             "executor-registration.schema.json",
             "task.schema.json",
-        }:
+        ):
             with self.subTest(schema=schema_name):
                 schema = json.loads((SCHEMA_ROOT / schema_name).read_text(encoding="utf-8"))
                 required_fields = set(schema["required"])
@@ -520,10 +520,10 @@ class SchemaContractTests(unittest.TestCase):
         )
 
     def test_iplanic_runtime_schemas_separate_plan_from_execution_state(self) -> None:
-        for schema_name in {
+        for schema_name in (
             "iplan-execution-record.schema.json",
             "iplan-evidence-bundle.schema.json",
-        }:
+        ):
             with self.subTest(schema=schema_name):
                 schema_path = SCHEMA_ROOT / schema_name
                 schema = json.loads(schema_path.read_text(encoding="utf-8"))
@@ -632,7 +632,7 @@ class SchemaContractTests(unittest.TestCase):
     def test_iplan_template_exposes_executor_todos_context_and_reporting(self) -> None:
         template_text = (STANDARD_TEMPLATE_ROOT / "IPLAN-TEMPLATE.yaml").read_text(encoding="utf-8")
 
-        for expected_snippet in {
+        for expected_snippet in (
             "initialization:",
             "start_conditions:",
             "completion_gate:",
@@ -647,7 +647,7 @@ class SchemaContractTests(unittest.TestCase):
             "failure_handling:",
             "on_blocker:",
             "reporting:",
-        }:
+        ):
             with self.subTest(snippet=expected_snippet):
                 self.assertIn(expected_snippet, template_text)
 
@@ -662,7 +662,7 @@ class SchemaContractTests(unittest.TestCase):
     def test_iplan_chain_template_exposes_complete_execution_order(self) -> None:
         template_text = (STANDARD_TEMPLATE_ROOT / "IPLAN-CHAIN-TEMPLATE.yaml").read_text(encoding="utf-8")
 
-        for expected_snippet in {
+        for expected_snippet in (
             'schema_version: "1.3-draft"',
             "plan_version_id:",
             "canonical_hash:",
@@ -682,7 +682,7 @@ class SchemaContractTests(unittest.TestCase):
             "required_handoffs:",
             "inter_plan_handoffs:",
             "semantic_rules:",
-        }:
+        ):
             with self.subTest(snippet=expected_snippet):
                 self.assertIn(expected_snippet, template_text)
 
@@ -700,7 +700,7 @@ class SchemaContractTests(unittest.TestCase):
 
         for line in template_text.splitlines():
             stripped = line.strip()
-            if stripped.startswith("iplan_id:") or stripped.startswith("- iplan_id:"):
+            if stripped.startswith(("iplan_id:", "- iplan_id:")):
                 all_referenced_plan_ids.add(stripped.split('"')[1])
 
         self.assertTrue(declared_plan_ids)
@@ -740,7 +740,7 @@ class SchemaContractTests(unittest.TestCase):
     def test_iplan_chain_template_defines_clear_handoff_steps_between_plans(self) -> None:
         template_text = (STANDARD_TEMPLATE_ROOT / "IPLAN-CHAIN-TEMPLATE.yaml").read_text(encoding="utf-8")
 
-        for expected_snippet in {
+        for expected_snippet in (
             "inter_plan_handoffs:",
             'handoff_id: "HANDOFF-001"',
             "handoff_type:",
@@ -752,7 +752,7 @@ class SchemaContractTests(unittest.TestCase):
             "validation_report_id:",
             "approval_event_id:",
             "approved_hash:",
-        }:
+        ):
             with self.subTest(snippet=expected_snippet):
                 self.assertIn(expected_snippet, template_text)
 
@@ -780,7 +780,7 @@ class SchemaContractTests(unittest.TestCase):
             {"executor_context", "executor_work", "failure_handling"}.issubset(set(step_schema["required"]))
         )
 
-        for expected_snippet in {
+        for expected_snippet in (
             "executor_context:",
             "executor_work:",
             "todos:",
@@ -788,7 +788,7 @@ class SchemaContractTests(unittest.TestCase):
             "failure_handling:",
             "evidence_requirements:",
             "handoff:",
-        }:
+        ):
             with self.subTest(snippet=expected_snippet):
                 self.assertIn(expected_snippet, template_text)
 
@@ -879,7 +879,7 @@ class SchemaContractTests(unittest.TestCase):
         self.assertEqual(
             {"create", "modify", "delete", "read", "verify"}, set(target_file_schema["properties"]["action"]["enum"])
         )
-        for command_group in {"setup", "execute", "verify"}:
+        for command_group in ("setup", "execute", "verify"):
             with self.subTest(command_group=command_group):
                 self.assertTrue(
                     {"items", "not_applicable_reason"}.issubset(
@@ -997,13 +997,13 @@ class SchemaContractTests(unittest.TestCase):
         self.assertIn('"artifact_type": {"const": "IPLAN"}', direction_rules)
         self.assertIn('"artifact_type": {"const": "TMP-IPLAN"}', direction_rules)
 
-        for expected_snippet in {
+        for expected_snippet in (
             "temporary_handoffs:",
             'tmp_iplan_id: "TMP-IPLAN-2026-06-01-example"',
             'direction: "iplan_to_tmp"',
             'direction: "tmp_to_iplan"',
             "expected_return:",
-        }:
+        ):
             with self.subTest(snippet=expected_snippet):
                 self.assertIn(expected_snippet, template_text)
 
