@@ -21,3 +21,5 @@ node_modules/
 .vscode/
 .idea/
 Thumbs.db
+uv.lock
+
