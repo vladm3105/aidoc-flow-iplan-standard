@@ -23,11 +23,11 @@ __all__ = [
     "CANONICALIZATION_VERSION",
     "HASH_ALGORITHM",
     "SIGNATURE_ALGORITHMS",
-    "canonicalize",
     "canonical_hash",
+    "canonicalize",
     "drop_null",
-    "signing_payload",
     "evidence_seal_hash",
     "sign",
+    "signing_payload",
     "verify",
 ]
